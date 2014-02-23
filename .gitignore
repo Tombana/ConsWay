@@ -5,3 +5,4 @@ lib/
 bin/
 Makefile
 cmake_install.cmake
+Test/
