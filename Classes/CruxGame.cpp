@@ -10,7 +10,7 @@ namespace Crux
     Game::Game()
     {
         map = 0;
-        gameState = ACTIVE;
+        gameState = PLAYER_TURN;
     }
 
     Game::~Game()
@@ -21,7 +21,7 @@ namespace Crux
 
     bool Game::initialize(GameDelegate* _delegate)
     {
-        // TODO: should be contents of file
+        // TODO: should read contents of file?
         map = new Map(4, 2, "****====");
         delegate = _delegate;
 
@@ -37,7 +37,7 @@ namespace Crux
 
     void Game::update()
     {
-        if(!(gameState == ACTIVE))
+        if(!(gameState < PLAYER_LOST))
             return; 
         
         map->step();
@@ -48,7 +48,7 @@ namespace Crux
 
     void Game::move(DIRECTION dir)
     {
-        if(!(gameState == ACTIVE))
+        if(!(gameState == PLAYER_TURN))
             return;
 
         switch(dir) {
@@ -87,7 +87,7 @@ namespace Crux
     {
         if(map->val(player.x, player.y) == '*') {
             // game over
-            gameState = GAMEOVER;
+            gameState = PLAYER_LOST;
         }
     }
 
@@ -95,7 +95,7 @@ namespace Crux
     {
         if(player.x == finalx && player.y == finaly) {
             // we won the game
-            gameState = WON;
+            gameState = PLAYER_WON;
         }
     }
 

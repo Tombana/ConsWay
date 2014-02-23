@@ -24,6 +24,8 @@ namespace Crux
     bool Map::initFromConfiguration(string config)
     {
         grid = vector<vector<char> >(n, vector<char>(m, 0));
+        burnTime = vector<vector<short> >(n, vector<short>(m, 0));
+
         stringstream sin(config);
 
         for(int i = 0; i < n; ++i) {
@@ -42,6 +44,10 @@ namespace Crux
         for(int i = 1; i < (n - 1); ++i)
             for(int j = 1; j < (m - 1); ++j) {
                 if(grid[i][j] != '*') continue;
+                if(++burnTime[i][j] > 10) {
+                    grid[i][j] = '/';
+                    continue;
+                }
                 
                 for(int di = -1; di <= 1; ++di)
                     for(int dj = -1; dj <= 1; ++dj) {
