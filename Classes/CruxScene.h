@@ -13,7 +13,12 @@ public:
     CruxScene();
     virtual ~CruxScene();
 
-    static cocos2d::Scene* createScene();
+    //Called by AppDelegate
+    //Creates a new Scene, and a new CruxScene layer
+    //and adds the layer to the scene
+    static Scene* createScene();
+    Layer* getInterfaceLayer() const { return interfaceLayer; }
+
     virtual bool init();  
     // implement the "static create()" method manually
     CREATE_FUNC(CruxScene);
@@ -42,6 +47,7 @@ public:
 private:
     Game* game;
     Sprite* player;
+    Layer* interfaceLayer;
     LabelTTF* actionPointsLabel;
     LabelTTF* gameStateLabel;
 

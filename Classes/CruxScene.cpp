@@ -10,8 +10,9 @@ Scene* CruxScene::createScene()
     // 'scene' is an autorelease object
     // 'layer' is an autorelease object
     auto scene = Scene::create();
-    auto layer = CruxScene::create();
+    CruxScene* layer = CruxScene::create();
     scene->addChild(layer);
+    scene->addChild(layer->getInterfaceLayer());
     return scene;
 }
 
@@ -43,42 +44,39 @@ bool CruxScene::init()
     if ( !Layer::init() )
         return false;
 
+    interfaceLayer = Layer::create();
+
     Size visibleSize = Director::getInstance()->getVisibleSize();
     Point origin = Director::getInstance()->getVisibleOrigin();
 
     //Menu with close button
-    auto closeItem = MenuItemImage::create("CloseNormal.png",
-                                           "CloseSelected.png",
-                                           CC_CALLBACK_1(CruxScene::menuCloseCallback, this));
-	closeItem->setPosition(origin + Point(visibleSize.width - closeItem->getContentSize().width/2 ,
-                                closeItem->getContentSize().height/2));
+    //auto closeItem = MenuItemImage::create("CloseNormal.png",
+    //                                       "CloseSelected.png",
+    //                                       CC_CALLBACK_1(CruxScene::menuCloseCallback, this));
+	//closeItem->setPosition(origin + Point(visibleSize.width - closeItem->getContentSize().width/2 ,
+    //                            closeItem->getContentSize().height/2));
 
-    auto menu = Menu::create(closeItem, NULL);
-    menu->setPosition(Point::ZERO);
-    //this->addChild(menu, 1);
+    //auto menu = Menu::create(closeItem, NULL);
+    //menu->setPosition(Point::ZERO);
+    //interfaceLayer->addChild(menu, 1);
 
     //Title
     auto label = LabelTTF::create("--~~** Crux **~~--", "Arial", 24);
     label->setPosition(Point(origin.x + visibleSize.width/2, origin.y + visibleSize.height - label->getContentSize().height * 0.5));
-    this->addChild(label, 1);
+    interfaceLayer->addChild(label, 1);
 
     actionPointsLabel = LabelTTF::create("Action Points: ", "Arial", 24);
     actionPointsLabel->setPosition(Point(actionPointsLabel->getContentSize().width * 0.5 + 10, visibleSize.height - actionPointsLabel->getContentSize().height * 0.5 - 10));
-    this->addChild(actionPointsLabel, 6);
+    interfaceLayer->addChild(actionPointsLabel, 6);
 
     gameStateLabel = LabelTTF::create("Game State: ", "Arial", 24);
     gameStateLabel->setPosition(Point(gameStateLabel->getContentSize().width * 0.5 + 10, visibleSize.height - gameStateLabel->getContentSize().height - 20));
-    this->addChild(gameStateLabel, 6);
+    interfaceLayer->addChild(gameStateLabel, 6);
 
     initializeGame();
 
     int w = game->getMap()->getWidth();
     int h = game->getMap()->getHeight();
-
-    // add "CruxScene" splash screen"
-    //auto sprite = Sprite::create("CruxScene.png");
-    //sprite->setPosition(Point(visibleSize.width/2 + origin.x, visibleSize.height/2 + origin.y));
-    //this->addChild(sprite, 0);
 
     //Create player sprite
     player = Sprite::create("Player.png");
