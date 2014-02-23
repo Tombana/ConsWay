@@ -78,6 +78,8 @@ bool HelloWorld::init()
     auto player = Sprite::create("Player.png");
     player->setPosition(Point(visibleSize.width/2 + origin.x, visibleSize.height/2 + origin.y));
     this->addChild(player);
+
+    this->schedule( schedule_selector(HelloWorld::gameLogic), 1.0 );
     
     return true;
 }
@@ -100,7 +102,7 @@ void HelloWorld::addEnemy()
 
     // Create the target slightly off-screen along the right edge,
     // and along a random position along the Y axis as calculated
-    target->setPosition( Point(visibleSize.width + (enemyWidth/2), actualY) );
+    target->setPosition( Point(origin.x + visibleSize.width + (enemyWidth/2), actualY) );
     this->addChild(target);
 
     // Determine speed of the target
@@ -110,8 +112,10 @@ void HelloWorld::addEnemy()
     int actualDuration = ( rand() % rangeDuration ) + minDuration;
 
     // Create the actions
-    FiniteTimeAction* actionMove = MoveTo::create( (float)actualDuration, Point(0 - target->getContentSize().width/2, actualY) );
-    FiniteTimeAction* actionMoveDone = CallFuncN::create( this, callfuncN_selector(HelloWorld::spriteMoveFinished));
+    FiniteTimeAction* actionMove;
+    FiniteTimeAction* actionMoveDone;
+    actionMove = MoveTo::create( (float)actualDuration, Point(origin.x - target->getContentSize().width/2, actualY) );
+    actionMoveDone = CallFuncN::create( this, callfuncN_selector(HelloWorld::spriteMoveFinished));
     target->runAction( Sequence::create(actionMove, actionMoveDone, NULL) );
 }
 
@@ -119,6 +123,11 @@ void HelloWorld::spriteMoveFinished(Node* sender)
 {
     Sprite* sprite = (Sprite*)sender;
     this->removeChild(sprite, true);
+}
+
+void HelloWorld::gameLogic(float dt)
+{
+    addEnemy();
 }
 
 void HelloWorld::menuCloseCallback(Object* pSender)

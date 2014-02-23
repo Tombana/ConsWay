@@ -14,6 +14,7 @@ public:
 
     void addEnemy();
     void spriteMoveFinished(Node* sender);
+    void gameLogic(float dt);
     
     // a selector callback
     void menuCloseCallback(Object* pSender);
