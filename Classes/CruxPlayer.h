@@ -1,3 +1,4 @@
+#pragma once
 #include "CruxCommon.h"
 #include "CruxAbility.h"
 #include "CruxMap.h"
@@ -22,9 +23,9 @@ namespace Crux
             void useAbility(int id, DIRECTION dir);
 
             int getActionPoints() const { return actionPoints; }
-            void setActionPoints(int _ap) { actionPoints = ap; }
+            void setActionPoints(int _ap) { actionPoints = _ap; }
 
-            Point getPosition() const { return position };
+            Pos2 getPosition() const { return position; }
 
         private:
             // A player has a certain amount of action points (AP)
@@ -37,6 +38,6 @@ namespace Crux
 
             // the current position of the player is the grid point (tile)
             // it currently stands on
-            Point position;
+            Pos2 position;
     };
 }

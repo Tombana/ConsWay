@@ -19,10 +19,13 @@ namespace Crux
     {
         position.x = 0;
         position.y = 0;
+        actionPoints = 3;
     }
 
     void Player::move(DIRECTION dir, Map* map)
     {
+        if(actionPoints <= 0) return;
+
         switch(dir) {
             case UP:
                 if(position.y == (map->getHeight() - 1))
@@ -48,6 +51,7 @@ namespace Crux
                 cerr << "ERROR: Unknown move command: " << dir << endl;
                 break;
         }
+        actionPoints--;
     }
 
 }

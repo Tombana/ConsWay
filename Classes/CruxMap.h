@@ -1,3 +1,4 @@
+#pragma once
 // Instances of this class will represent the map. we have
 // the following legend: 
 // 
@@ -36,12 +37,11 @@ namespace Crux
             // dt seconds, where dt is the time between 'gameturns'.
             void step(); 
 
-            // returns the integer value of the square at (i, j)
-            // where 0 <= i < n, 0 <= j < m. returns -1 if the 
-            // square is out of bouds. The integer value is the 
-            // color of the square, for future support of multiple
-            // colors
-			// SHOULD RETURN 0 IF OUT OF BOUNDS
+            // returns the char value of the square at (i, j)
+            // where 0 <= i < n, 0 <= j < m. returns 0 if the 
+            // square is out of bouds. The char value is the 
+            // type of the square, see the legend at the top
+            // of this file
             char val(int i, int j);
 
 

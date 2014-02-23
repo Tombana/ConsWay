@@ -1,4 +1,5 @@
 #include "CruxScene.h"
+#include <string>
 #include <iostream>
 using namespace std;
 
@@ -60,27 +61,52 @@ bool CruxScene::init()
     this->addChild(player, 5);
 
     //Load game
-    game->initialize(this);
-    
-    this->schedule( schedule_selector(CruxScene::gameLoop), 1.0 );
-
+    std::string mapdata = FileUtils::getInstance()->getStringFromFile("testmap.txt");
+    game->initialize(this, mapdata);
     int w = game->getMap()->getWidth();
     int h = game->getMap()->getHeight();
+
+    auto batchNode = SpriteBatchNode::create("tiles.png", w*h);
+    tileX = batchNode->getTexture()->getPixelsWide() / 4;
+    tileY = batchNode->getTexture()->getPixelsHigh() / 3;
+   
     tileSprites = vector< vector<Sprite*> > ( w, vector<Sprite*>(h, 0) );
     for(int x = 0; x < w; ++x)
         for(int y = 0; y < h; ++y)
         {
-            auto sq = Sprite::create("tilea.png");
-            sq->setPosition(Point( visibleSize.width/2 + x * sq->getContentSize().width, visibleSize.height/2 + y * sq->getContentSize().height ) );
-            this->addChild(sq);
+            auto sq = Sprite::createWithTexture(batchNode->getTexture());
+            char type = game->getMap()->val(x,y);
+            sq->setTextureRect(getRect(type));
+            sq->setPosition(origin + Point(tileX/2,tileY/2) + Point(x*tileX, y*tileY));
+            batchNode->addChild(sq);
             tileSprites[x][y] = sq;
         }
+    this->addChild(batchNode);
 
     auto listener = EventListenerKeyboard::create();
     listener->onKeyPressed = CC_CALLBACK_2(CruxScene::onKeyPressed, this);
     getEventDispatcher()->addEventListenerWithSceneGraphPriority(listener, this);
+
+    this->schedule( schedule_selector(CruxScene::gameLoop), 1.0 );
     
     return true;
+}
+
+#define REKT(x,y,a,b) Rect( x * a, y * b, a, b )
+
+Rect CruxScene::getRect(char type)
+{
+    switch(type)
+    {
+        case '.': return REKT(0,0, tileX, tileY);
+        case '|': return REKT(1,0, tileX, tileY);
+        case '#': return REKT(2,0, tileX, tileY);
+        case '*': return REKT(3,0, tileX, tileY);
+        case '=': return REKT(0,1, tileX, tileY);
+        case '~': return REKT(1,1, tileX, tileY);
+        case '/': return REKT(2,1, tileX, tileY);
+        default: return REKT(3,1, tileX, tileY);
+    }
 }
 
 void CruxScene::addEnemy()
@@ -129,21 +155,22 @@ void CruxScene::spriteMoveFinished(Node* sender)
 
 void CruxScene::gameLoop(float dt)
 {
-    game->update();
+    //game->update();
 }
 
 //Callback from game
 void CruxScene::gameUpdated()
 {
+    if(tileSprites.empty()) return;
     for(int x = 0; x < tileSprites.size(); ++x)
         for(int y = 0; y < tileSprites[0].size(); ++y)
-            tileSprites[x][y]->setTexture( game->getMap()->val(x,y) ? "tilea.png" : "tileb.png" );
-    if(tileSprites.empty()) return;
-    Size visibleSize = Director::getInstance()->getVisibleSize();
-    int x = game->getPlayer()->x;
-    int y = game->getPlayer()->y;
-    auto sq = tileSprites[0][0];
-    player->setPosition(Point( visibleSize.width/2 + x * sq->getContentSize().width, visibleSize.height/2 + y * sq->getContentSize().height ) );
+            tileSprites[x][y]->setTextureRect( getRect( game->getMap()->val(x,y) ) );
+    Pos2 p = game->getPlayer()->getPosition();
+    Point origin = Director::getInstance()->getVisibleOrigin();
+    Point target = origin + Point(tileX/2,tileY/2) + Point(p.x*tileX, p.y*tileY);
+    //player->setPosition(target);
+    FiniteTimeAction* actionMove = MoveTo::create(0.05f, target);
+    player->runAction(actionMove);
 }
 
 void CruxScene::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
@@ -160,6 +187,9 @@ void CruxScene::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
             break;
         case EventKeyboard::KeyCode::KEY_RIGHT_ARROW:
             game->move(RIGHT);
+            break;
+        case EventKeyboard::KeyCode::KEY_A:
+            game->finishPlayerTurn();
             break;
         default:
             break;
