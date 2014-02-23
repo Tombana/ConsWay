@@ -77,7 +77,7 @@ namespace Crux
 
     void Game::finishPlayerTurn()
     {
-        if(!gameState == PLAYER_TURN)
+        if(!(gameState == PLAYER_TURN))
             return;
 
         gameState = NPC_TURN;

@@ -40,6 +40,7 @@ private:
     Game* game;
     Sprite* player;
     LabelTTF* actionPointsLabel;
+    LabelTTF* gameStateLabel;
 
     int tileX;
     int tileY;

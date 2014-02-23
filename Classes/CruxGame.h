@@ -19,7 +19,7 @@ namespace Crux
         PLAYER_TURN,
         NPC_TURN,
         PLAYER_LOST,
-        PLAYER_WON,
+        PLAYER_WON
     } STATE;
 
     class GameDelegate
