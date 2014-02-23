@@ -1,4 +1,4 @@
-#include "CruxSceneScene.h"
+#include "CruxScene.h"
 #include <iostream>
 using namespace std;
 
@@ -16,7 +16,7 @@ Scene* CruxScene::createScene()
 
 CruxScene::CruxScene()
 {
-    game = new game;
+    game = new Game();
     player = 0;
 }
 

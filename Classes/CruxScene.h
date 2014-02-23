@@ -2,9 +2,9 @@
 #define __CRUXSCENE_H__
 
 #include "cocos2d.h"
-#include "ConwayGame.h"
+#include "CruxGame.h"
 
-using namespace ConsWay;
+using namespace Crux;
 using namespace cocos2d;
 
 class CruxScene : public Layer, public GameDelegate
@@ -39,7 +39,7 @@ public:
 private:
     Game* game;
     Sprite* player;
-    //vector< vector<Sprite*> > tileSprites;
+    vector< vector<Sprite*> > tileSprites;
 };
 
 #endif // __CRUXSCENE_H__

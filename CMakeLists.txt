@@ -42,7 +42,7 @@ endif()
 set(GAME_SRC
   proj.linux/main.cpp
   Classes/AppDelegate.cpp
-  Classes/Scene.cpp
+  Classes/CruxScene.cpp
   Classes/CruxGame.cpp
   Classes/CruxMap.cpp
 )
