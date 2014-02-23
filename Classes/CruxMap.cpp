@@ -27,7 +27,7 @@ namespace Crux
 
         for(int i = 0; i < w; ++i) {
             for(int j = 0; j < h; ++j) {
-                sin >> grid[w - 1 - i][h - 1 - j];
+                sin >> grid[j][h - 1 - i];
             }
         }
 
@@ -42,7 +42,7 @@ namespace Crux
             for(int j = 0; j < h; ++j) {
                 if(grid[i][j] != '*') continue;
                 if(++burnTime[i][j] > 10) {
-                    grid[i][j] = '/';
+                    grid_copy[i][j] = '/';
                     continue;
                 }
                 

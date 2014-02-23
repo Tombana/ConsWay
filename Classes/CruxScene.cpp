@@ -155,7 +155,7 @@ void CruxScene::spriteMoveFinished(Node* sender)
 
 void CruxScene::gameLoop(float dt)
 {
-    game->update();
+    //game->update();
 }
 
 //Callback from game
