@@ -1,8 +1,10 @@
 #include "CruxGame.h"
 
 #include <iostream>
+#include <sstream>
 
 using std::cerr;
+using std::stringstream;
 using std::endl;
 
 namespace Crux
@@ -17,24 +19,37 @@ namespace Crux
     {
         if(map)
             delete map;
+        if(player)
+            delete player;
     }
 
-    bool Game::initialize(GameDelegate* _delegate)
+    bool Game::initialize(GameDelegate* _delegate, string mapConfiguration)
     {
+        stringstream sin(mapConfiguration);
+        int w, h; 
+        sin >> w >> h;
+
         // TODO: should read contents of file?
-        map = new Map(4, 2, "****====");
+        map = new Map(w, h);
+        map->initFromConfiguration(sin);
         delegate = _delegate;
 
         finalx = 9;
         finaly = 9;
 
-        player.x = 0;
-        player.y = 0;
+        apPerTurn = 3;
+
+        player = new Player();
 
         delegate->gameUpdated();
         return true;
     }
 
+    void Game::performNPCMoves()
+    {
+        // update npc moves
+    }
+    
     void Game::update()
     {
         if(!(gameState < PLAYER_LOST))
@@ -51,31 +66,7 @@ namespace Crux
         if(!(gameState == PLAYER_TURN))
             return;
 
-        switch(dir) {
-            case UP:
-                if(player.y == (map->getHeight() - 1))
-                    break;
-                player.y++;
-                break;
-            case LEFT:
-                if(player.x == 0)
-                    break;
-                player.x--;
-                break;
-            case DOWN:
-                if(player.y == 0)
-                    break;
-                player.y--;
-                break;
-             case RIGHT:
-                if(player.x == (map->getWidth() - 1))
-                    break;
-                player.x++;
-                break;
-            default:
-                cerr << "ERROR: Unknown move command: " << dir << endl;
-                break;
-        }
+        player->move(dir, map);
 
         checkLegalSquare();
         checkFinalSquare();
@@ -83,9 +74,22 @@ namespace Crux
         delegate->gameUpdated();
     }
 
+    void Game::finishPlayerTurn()
+    {
+        if(!gameState == PLAYER_TURN)
+            return;
+
+        gameState = NPC_TURN;
+
+        performNPCMoves();
+
+        player->setActionPoints(apPerTurn);
+        gameState = PLAYER_TURN;
+    }
+
     void Game::checkLegalSquare()
     {
-        if(map->val(player.x, player.y) == '*') {
+        if(map->val(player->getPosition().x, player->getPosition().y) == '*') {
             // game over
             gameState = PLAYER_LOST;
         }
@@ -93,11 +97,10 @@ namespace Crux
 
     void Game::checkFinalSquare()
     {
-        if(player.x == finalx && player.y == finaly) {
+        if(player->getPosition().x == finalx && player->getPosition().y == finaly) {
             // we won the game
             gameState = PLAYER_WON;
         }
     }
-
 
 }

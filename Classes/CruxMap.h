@@ -11,10 +11,10 @@
 //
 // on an (n x m) grid which we be loaded in from a file
 
-#include <string> 
+#include <sstream> 
 #include <vector> 
 
-using std::string;
+using std::stringstream;
 using std::vector;
 
 namespace Crux
@@ -24,31 +24,31 @@ namespace Crux
         public:
             // initializes a new map of size (n, m) from the 
             // 'seed'  config
-            Map(int _n, int _m, string config);
+            Map(int _w, int _h);
             ~Map();
 
             // initializes from a ASCII configuration file, which
             // is represented a string and should contain (n x m)
             // characters.
-            bool initFromConfiguration(std::string config);
+            bool initFromConfiguration(stringstream& sin);
 
             // simulates one CGOL step this should be called every
             // dt seconds, where dt is the time between 'gameturns'.
             void step(); 
 
-            // returns the integer value of the square at (i, j)
+            // returns the char value of the square at (i, j)
             // where 0 <= i < n, 0 <= j < m. returns -1 if the 
-            // square is out of bouds. The integer value is the 
-            // color of the square, for future support of multiple
-            // colors
+            // square is out of bouds. The char value is the 
+            // type of the square, see the legend at the top
+            // of this file
             char val(int i, int j);
 
-            int getWidth() const { return n; };
-            int getHeight() const { return m; }; 
+            int getWidth() const { return w; };
+            int getHeight() const { return h; }; 
 
         private:
-            int n;
-            int m;
+            int w;
+            int h;
             vector<vector<char> > grid;
             vector<vector<short> > burnTime;
     };

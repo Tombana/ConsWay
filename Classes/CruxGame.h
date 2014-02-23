@@ -4,17 +4,14 @@
 // largely be contained in this function.
 
 #include "CruxMap.h"
+#include "CruxCommon.h"
+#include "CruxPlayer.h"
+
+#include <string>
+using std::string;
 
 namespace Crux
 {
-    typedef enum 
-    {
-        UP = 1,
-        LEFT,
-        DOWN,
-        RIGHT
-    } DIRECTION;
-
     typedef enum 
     {
         IDLE = 1,
@@ -23,16 +20,6 @@ namespace Crux
         PLAYER_LOST,
         PLAYER_WON,
     } STATE;
-
-    struct Player
-    {
-        // position on the grid
-        int x;
-        int y;
-
-        // amount of points left this turn
-        int actionPoints;
-    };
 
     class GameDelegate
     {
@@ -51,16 +38,20 @@ namespace Crux
 
             // this initializes the game, including the 
             // map, player, start and end points, etc.
-            bool initialize(GameDelegate*  _delegate);
+            bool initialize(GameDelegate*  _delegate, string mapConfiguration);
 
-            // updates the game (one step)
-            void update();
-
-            // this moves the player one square to the left,
-            void move(DIRECTION dir);
+            // finishes the player turn
+            void finishTurn();
 
             // returns the current game state
             STATE getGameState() { return gameState; };
+
+            // moves the player and updates game logic, checking if
+            // player is still valid
+            void move(DIRECTION dir);
+
+            // this finishes a turn, and lets the NPCs do their moves
+            void finishPlayerTurn();
 
             // returns the map
             Map* getMap() const { return map; };
@@ -68,6 +59,11 @@ namespace Crux
             const Player* getPlayer() const { return &player; }
 
         private:
+            // perform npc moves
+            void performNPCMoves();
+            // updates the game (one step)
+            void update();
+
             // checks if the player is on a legal square. Note
             // that this can be the final square, so this should
             // be called before checkFinalSquare
@@ -77,6 +73,9 @@ namespace Crux
             void checkFinalSquare();
             int finalx;
             int finaly;
+
+            // action points (player) per turn:
+            int apPerTurn;
 
             // finishes the game, reinitialize??
             void gameOver();
@@ -88,7 +87,7 @@ namespace Crux
             STATE gameState;
             
             // player
-            Player player;
+            Player* player;
 
             // delegate
             GameDelegate* delegate;

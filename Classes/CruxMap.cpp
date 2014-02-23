@@ -9,11 +9,10 @@ using std::endl;
 
 namespace Crux
 {
-    Map::Map(int _n, int _m, string config)
+    Map::Map(int _w, int _h)
     {
-        n = _n;
-        m = _m;
-        initFromConfiguration(config);
+        w = _w;
+        h = _h;
     }
 
     Map::~Map()
@@ -21,15 +20,13 @@ namespace Crux
 
     }
 
-    bool Map::initFromConfiguration(string config)
+    bool Map::initFromConfiguration(stringstream& sin)
     {
-        grid = vector<vector<char> >(n, vector<char>(m, 0));
-        burnTime = vector<vector<short> >(n, vector<short>(m, 0));
+        grid = vector<vector<char> >(w, vector<char>(h, 0));
+        burnTime = vector<vector<short> >(w, vector<short>(h, 0));
 
-        stringstream sin(config);
-
-        for(int i = 0; i < n; ++i) {
-            for(int j = 0; j < m; ++j) {
+        for(int i = 0; i < w; ++i) {
+            for(int j = 0; j < h; ++j) {
                 sin >> grid[i][j];
             }
         }
@@ -41,8 +38,8 @@ namespace Crux
     {
         vector<vector<char> > grid_copy = grid;
 
-        for(int i = 1; i < (n - 1); ++i)
-            for(int j = 1; j < (m - 1); ++j) {
+        for(int i = 1; i < (w - 1); ++i)
+            for(int j = 1; j < (h - 1); ++j) {
                 if(grid[i][j] != '*') continue;
                 if(++burnTime[i][j] > 10) {
                     grid[i][j] = '/';
@@ -62,6 +59,9 @@ namespace Crux
 
     char Map::val(int i, int j)
     {
+        if((i < 0 || i >= w) || (j < 0 || j >= h)) {
+            return -1;
+        }
         return grid[i][j];
     }
 
