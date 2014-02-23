@@ -55,7 +55,7 @@ bool CruxScene::init()
 
     auto menu = Menu::create(closeItem, NULL);
     menu->setPosition(Point::ZERO);
-    this->addChild(menu, 1);
+    //this->addChild(menu, 1);
 
     //Title
     auto label = LabelTTF::create("--~~** Crux **~~--", "Arial", 24);
@@ -222,6 +222,9 @@ void CruxScene::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
             break;
         case EventKeyboard::KeyCode::KEY_R:
             initializeGame();
+            break;
+        case EventKeyboard::KeyCode::KEY_ESCAPE:
+            Director::getInstance()->end();
             break;
         default:
             break;
