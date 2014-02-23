@@ -1,1 +1,7 @@
 cocos2d/
+CMakeCache.txt
+CMakeFiles
+lib/
+bin/
+Makefile
+cmake_install.cmake
