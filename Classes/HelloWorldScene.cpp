@@ -111,11 +111,13 @@ void HelloWorld::addEnemy()
     int rangeDuration = maxDuration - minDuration;
     int actualDuration = ( rand() % rangeDuration ) + minDuration;
 
+    std::function<void(Node*)> callbackFunction = std::bind( &HelloWorld::spriteMoveFinished, this, std::placeholders::_1 );
     // Create the actions
     FiniteTimeAction* actionMove;
     FiniteTimeAction* actionMoveDone;
     actionMove = MoveTo::create( (float)actualDuration, Point(origin.x - target->getContentSize().width/2, actualY) );
-    actionMoveDone = CallFuncN::create( this, callfuncN_selector(HelloWorld::spriteMoveFinished));
+    actionMoveDone = CallFuncN::create(callbackFunction);
+
     target->runAction( Sequence::create(actionMove, actionMoveDone, NULL) );
 }
 
