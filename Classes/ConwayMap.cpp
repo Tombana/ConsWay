@@ -90,6 +90,4 @@ namespace ConsWay
         }
         fout.close();
     }
-
-
 }
