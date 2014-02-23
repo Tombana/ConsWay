@@ -50,5 +50,6 @@ namespace Crux
             int n;
             int m;
             vector<vector<char> > grid;
+            vector<vector<short> > burnTime;
     };
 }
