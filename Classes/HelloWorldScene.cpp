@@ -71,10 +71,55 @@ bool HelloWorld::init()
 
     // add the sprite as a child to this layer
     this->addChild(sprite, 0);
+
+    // ---------------
+    // Add the awesome local player sprite
+
+    auto player = Sprite::create("Player.png");
+    player->setPosition(Point(visibleSize.width/2 + origin.x, visibleSize.height/2 + origin.y));
+    this->addChild(player);
     
     return true;
 }
 
+void HelloWorld::addEnemy()
+{
+    auto target = Sprite::create("Target.png", Rect(0,0,27,40));
+
+    int enemyHeight = target->getContentSize().height;
+    int enemyWidth = target->getContentSize().width;
+
+    Size visibleSize = Director::getInstance()->getVisibleSize();
+    Point origin = Director::getInstance()->getVisibleOrigin();
+
+    int minY = enemyHeight/2;
+    int maxY = visibleSize.height - enemyHeight/2;
+    int rangeY = maxY - minY;
+    // srand( TimGetTicks() );
+    int actualY = ( rand() % rangeY ) + minY;
+
+    // Create the target slightly off-screen along the right edge,
+    // and along a random position along the Y axis as calculated
+    target->setPosition( Point(visibleSize.width + (enemyWidth/2), actualY) );
+    this->addChild(target);
+
+    // Determine speed of the target
+    int minDuration = (int)2.0;
+    int maxDuration = (int)4.0;
+    int rangeDuration = maxDuration - minDuration;
+    int actualDuration = ( rand() % rangeDuration ) + minDuration;
+
+    // Create the actions
+    FiniteTimeAction* actionMove = MoveTo::create( (float)actualDuration, Point(0 - target->getContentSize().width/2, actualY) );
+    FiniteTimeAction* actionMoveDone = CallFuncN::create( this, callfuncN_selector(HelloWorld::spriteMoveFinished));
+    target->runAction( Sequence::create(actionMove, actionMoveDone, NULL) );
+}
+
+void HelloWorld::spriteMoveFinished(Node* sender)
+{
+    Sprite* sprite = (Sprite*)sender;
+    this->removeChild(sprite, true);
+}
 
 void HelloWorld::menuCloseCallback(Object* pSender)
 {
