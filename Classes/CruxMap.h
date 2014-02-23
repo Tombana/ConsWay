@@ -41,7 +41,10 @@ namespace Crux
             // square is out of bouds. The integer value is the 
             // color of the square, for future support of multiple
             // colors
+			// SHOULD RETURN 0 IF OUT OF BOUNDS
             char val(int i, int j);
+
+
 
             int getWidth() const { return w; };
             int getHeight() const { return h; }; 
