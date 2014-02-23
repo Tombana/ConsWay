@@ -1,4 +1,6 @@
 #include "HelloWorldScene.h"
+#include <iostream>
+using namespace std;
 
 USING_NS_CC;
 
@@ -33,9 +35,6 @@ bool HelloWorld::init()
         return false;
     }
 
-    game = new Game();
-    game->initialize(this);
-    
     Size visibleSize = Director::getInstance()->getVisibleSize();
     Point origin = Director::getInstance()->getVisibleOrigin();
 
@@ -77,11 +76,13 @@ bool HelloWorld::init()
     //sprite->setPosition(Point(visibleSize.width/2 + origin.x, visibleSize.height/2 + origin.y));
     //this->addChild(sprite, 0);
 
-
-    auto player = Sprite::create("Player.png");
+    player = Sprite::create("Player.png");
     player->setPosition(Point(visibleSize.width/2 + origin.x, visibleSize.height/2 + origin.y));
     this->addChild(player, 5);
 
+    game = new Game();
+    game->initialize(this);
+    
     this->schedule( schedule_selector(HelloWorld::gameLogic), 1.0 );
 
     int w = game->getMap()->getWidth();
@@ -90,27 +91,19 @@ bool HelloWorld::init()
     for(int x = 0; x < w; ++x)
         for(int y = 0; y < h; ++y)
         {
-            auto sq = Sprite::create("Projectile.png");
+            auto sq = Sprite::create("tilea.png");
             sq->setPosition(Point( visibleSize.width/2 + x * sq->getContentSize().width, visibleSize.height/2 + y * sq->getContentSize().height ) );
             this->addChild(sq);
             tileSprites[x][y] = sq;
         }
+
+    auto listener = EventListenerKeyboard::create();
+    listener->onKeyPressed = CC_CALLBACK_2(HelloWorld::onKeyPressed, this);
+    //EventDispatcher::getInstance()->addEventListenerWithSceneGraphPriority(listener, this);
+    getEventDispatcher()->addEventListenerWithSceneGraphPriority(listener, this);
     
     return true;
 }
-
-void HelloWorld::drawTile() {
-	
-    auto white = Sprite::create("tilea.png");
-    auto black = Sprite::create("tileb.png");
-	for(int x=0; x<10; x++)
-		for(int y=0; y<10; y++) {
-			player->setPosition(Point(k*visibleSize.width/10 + origin.x, l*visibleSize.height/2 + origin.y));
-			player->setPosition(Point(k*visibleSize.width/10 + origin.x, l*visibleSize.height/2 + origin.y));
-		}
-    this->addChild(player);
-}
-
 
 void HelloWorld::addEnemy()
 {
@@ -158,7 +151,6 @@ void HelloWorld::spriteMoveFinished(Node* sender)
 
 void HelloWorld::gameLogic(float dt)
 {
-    game->move(UP);
     game->update();
 }
 
@@ -166,7 +158,33 @@ void HelloWorld::gameUpdated()
 {
     for(int x = 0; x < tileSprites.size(); ++x)
         for(int y = 0; y < tileSprites[0].size(); ++y)
-            tileSprites[x][y]->setVisible( game->getMap()->val(x,y) );
+            tileSprites[x][y]->setTexture( game->getMap()->val(x,y) ? "tilea.png" : "tileb.png" );
+    if(tileSprites.empty()) return;
+    Size visibleSize = Director::getInstance()->getVisibleSize();
+    int x = game->getPlayer()->x;
+    int y = game->getPlayer()->y;
+    auto sq = tileSprites[0][0];
+    player->setPosition(Point( visibleSize.width/2 + x * sq->getContentSize().width, visibleSize.height/2 + y * sq->getContentSize().height ) );
+}
+
+void HelloWorld::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
+{
+    switch(keyCode){
+        case EventKeyboard::KeyCode::KEY_UP_ARROW:
+            game->move(UP);
+            break;
+        case EventKeyboard::KeyCode::KEY_DOWN_ARROW:
+            game->move(DOWN);
+            break;
+        case EventKeyboard::KeyCode::KEY_LEFT_ARROW:
+            game->move(LEFT);
+            break;
+        case EventKeyboard::KeyCode::KEY_RIGHT_ARROW:
+            game->move(RIGHT);
+            break;
+        default:
+            break;
+    }
 }
 
 void HelloWorld::menuCloseCallback(Object* pSender)

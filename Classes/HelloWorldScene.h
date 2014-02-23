@@ -5,7 +5,9 @@
 #include "ConwayGame.h"
 
 using namespace ConsWay;
-class HelloWorld : public cocos2d::Layer, public GameDelegate
+using namespace cocos2d;
+
+class HelloWorld : public Layer, public GameDelegate
 {
 public:
     // there's no 'id' in cpp, so we recommend returning the class instance pointer
@@ -30,7 +32,10 @@ public:
     void gameUpdated();
     Game* game;
 
-    vector< vector<cocos2d::Sprite*> > tileSprites;
+    Sprite* player;
+    vector< vector<Sprite*> > tileSprites;
+
+    void onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event);
 };
 
 #endif // __HELLOWORLD_SCENE_H__

@@ -60,6 +60,8 @@ namespace ConsWay
             // returns the map
             Map* getMap() const { return map; };
 
+            const Player* getPlayer() const { return &player; }
+
         private:
             // checks if the player is on a legal square. Note
             // that this can be the final square, so this should

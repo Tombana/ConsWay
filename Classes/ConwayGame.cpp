@@ -24,8 +24,8 @@ namespace ConsWay
         map = new Map(10, 10, "Resources/testmap.txt");
         delegate = _delegate;
 
-        finalx = 10;
-        finaly = 10;
+        finalx = 9;
+        finaly = 9;
 
         player.x = 0;
         player.y = 0;
@@ -36,7 +36,7 @@ namespace ConsWay
 
     void Game::update()
     {
-        if((!gameState == ACTIVE))
+        if(!(gameState == ACTIVE))
             return; 
         
         map->step();
@@ -47,14 +47,14 @@ namespace ConsWay
 
     void Game::move(DIRECTION dir)
     {
-        if((!gameState == ACTIVE))
+        if(!(gameState == ACTIVE))
             return;
 
         switch(dir) {
             case UP:
                 if(player.y == (map->getHeight() - 1))
                     break;
-                player.y--;
+                player.y++;
                 break;
             case LEFT:
                 if(player.x == 0)
@@ -64,7 +64,7 @@ namespace ConsWay
             case DOWN:
                 if(player.y == 0)
                     break;
-                player.y++;
+                player.y--;
                 break;
              case RIGHT:
                 if(player.x == (map->getWidth() - 1))
@@ -84,7 +84,7 @@ namespace ConsWay
 
     void Game::checkLegalSquare()
     {
-        if(map->val(player.x, player.y) == 0) {
+        if(map->val(player.x, player.y) == 1) {
             // game over
             gameState = GAMEOVER;
         }
