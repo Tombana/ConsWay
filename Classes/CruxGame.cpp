@@ -1,8 +1,10 @@
 #include "CruxGame.h"
 
 #include <iostream>
+#include <sstream>
 
 using std::cerr;
+using std::stringstream;
 using std::endl;
 
 namespace Crux
@@ -17,19 +19,25 @@ namespace Crux
     {
         if(map)
             delete map;
+        if(player)
+            delete player;
     }
 
-    bool Game::initialize(GameDelegate* _delegate)
+    bool Game::initialize(GameDelegate* _delegate, string mapConfiguration)
     {
+        stringstream sin(mapConfiguration);
+        int w, h; 
+        sin >> w >> h;
+
         // TODO: should read contents of file?
-        map = new Map(4, 2, "****====");
+        map = new Map(w, h);
+        map->initFromConfiguration(sin);
         delegate = _delegate;
 
         finalx = 9;
         finaly = 9;
 
-        player.x = 0;
-        player.y = 0;
+        player = new Player();
 
         delegate->gameUpdated();
         return true;
@@ -65,7 +73,7 @@ namespace Crux
 
     void Game::checkLegalSquare()
     {
-        if(map->val(player.x, player.y) == '*') {
+        if(map->val(player->getPosition().x, player->getPosition().y) == '*') {
             // game over
             gameState = PLAYER_LOST;
         }
@@ -73,11 +81,10 @@ namespace Crux
 
     void Game::checkFinalSquare()
     {
-        if(player.x == finalx && player.y == finaly) {
+        if(player->getPosition().x == finalx && player->getPosition().y == finaly) {
             // we won the game
             gameState = PLAYER_WON;
         }
     }
-
 
 }

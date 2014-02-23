@@ -7,6 +7,7 @@ namespace Crux
 {
     Player::Player()
     {
+        initialize();
     }
 
     Player::~Player()

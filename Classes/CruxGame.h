@@ -5,6 +5,10 @@
 
 #include "CruxMap.h"
 #include "CruxCommon.h"
+#include "CruxPlayer.h"
+
+#include <string>
+using std::string;
 
 namespace Crux
 {
@@ -16,16 +20,6 @@ namespace Crux
         PLAYER_LOST,
         PLAYER_WON,
     } STATE;
-
-    struct Player
-    {
-        // position on the grid
-        int x;
-        int y;
-
-        // amount of points left this turn
-        int actionPoints;
-    };
 
     class GameDelegate
     {
@@ -44,7 +38,7 @@ namespace Crux
 
             // this initializes the game, including the 
             // map, player, start and end points, etc.
-            bool initialize(GameDelegate*  _delegate);
+            bool initialize(GameDelegate*  _delegate, string mapConfiguration);
 
             // finishes the player turn
             void finishTurn();
@@ -87,7 +81,7 @@ namespace Crux
             STATE gameState;
             
             // player
-            Player player;
+            Player* player;
 
             // delegate
             GameDelegate* delegate;
