@@ -1,4 +1,4 @@
-ConsWay
-=======
+Crux
+====
 
-A puzzle game based on Conway's Game of Lfie
+Crux is a 2D puzzle game
