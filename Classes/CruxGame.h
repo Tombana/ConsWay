@@ -5,17 +5,10 @@
 
 #include "CruxMap.h"
 #include "CruxNPC.h"
+#include "CruxCommon.h"
 
 namespace Crux
 {
-    typedef enum 
-    {
-        UP = 1,
-        LEFT,
-        DOWN,
-        RIGHT
-    } DIRECTION;
-
     typedef enum 
     {
         IDLE = 1,
@@ -54,14 +47,15 @@ namespace Crux
             // map, player, start and end points, etc.
             bool initialize(GameDelegate*  _delegate);
 
-            // this moves the player one square to the left,
-            void move(DIRECTION dir);
-
             // finishes the player turn
             void finishTurn();
 
             // returns the current game state
             STATE getGameState() { return gameState; };
+
+            // moves the player and updates game logic, checking if
+            // player is still valid
+            void move(DIRECTION dir);
 
             // returns the map
             Map* getMap() const { return map; };

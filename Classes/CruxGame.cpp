@@ -56,32 +56,7 @@ namespace Crux
         if(!(gameState == PLAYER_TURN))
             return;
 
-        switch(dir) {
-            case UP:
-                if(player.y == (map->getHeight() - 1))
-                    break;
-                player.y++;
-                break;
-            case LEFT:
-                if(player.x == 0)
-                    break;
-                player.x--;
-                break;
-            case DOWN:
-                if(player.y == 0)
-                    break;
-                player.y--;
-                break;
-             case RIGHT:
-                if(player.x == (map->getWidth() - 1))
-                    break;
-                player.x++;
-                break;
-            default:
-                cerr << "ERROR: Unknown move command: " << dir << endl;
-                break;
-        }
-
+        player->move(dir, map);
         checkLegalSquare();
         checkFinalSquare();
 
