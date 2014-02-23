@@ -27,7 +27,7 @@ namespace Crux
 
         for(int i = 0; i < w; ++i) {
             for(int j = 0; j < h; ++j) {
-                sin >> grid[i][j];
+                sin >> grid[w - 1 - i][h - 1 - j];
             }
         }
 
