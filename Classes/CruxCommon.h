@@ -14,6 +14,10 @@ namespace Crux
 
         int x;
         int y;
+		
+		int sqdist(const Pos2& a) const {
+			return (x-a.x)*(x-a.x)+(y-a.y)*(y-a.y);
+		}
     };
 
     typedef enum 

@@ -47,7 +47,9 @@ set(GAME_SRC
   Classes/CruxMap.cpp
   Classes/CruxAbility.cpp
   Classes/CruxPlayer.cpp
+  Classes/CruxNPC.cpp
 )
+
 
 set(COCOS2D_ROOT ${CMAKE_SOURCE_DIR}/cocos2d)
 

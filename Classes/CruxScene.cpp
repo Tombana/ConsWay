@@ -85,6 +85,23 @@ bool CruxScene::init()
 
     this->runAction(Follow::create(player));
 
+
+	//Create NPC sprite
+	for(int i=0; i<game->numNPCs(); i++) {
+		string imgName="";
+		switch(game->getNPC(i).getType()) {
+			case HORSE:
+				imgName="HORSE.png";
+			break;
+			//TODO: add other types
+		}
+
+		auto sprt = Sprite::create(imgName);
+		sprt->setPosition(Point(visibleSize.width/2 + origin.x, visibleSize.height/2 + origin.y));
+		this->addChild(sprt, 5);
+		npcSprites.push_back(sprt);
+	}
+
     auto batchNode = SpriteBatchNode::create("tiles.png", w*h);
     tileX = batchNode->getTexture()->getPixelsWide() / 4;
     tileY = batchNode->getTexture()->getPixelsHigh() / 3;
@@ -200,6 +217,15 @@ void CruxScene::gameUpdated()
     ss.str("Game State: ");
     ss << ss.rdbuf() << (int)game->getGameState();
     gameStateLabel->setString(ss.str());
+
+	for(int i=0; i<npcSprites.size(); i++) {
+		Point origin = Director::getInstance()->getVisibleOrigin();
+		Pos2 p=game->getNPC(i).getPos();
+		Point target = origin + Point(tileX/2,tileY/2) + Point(p.x*tileX, p.y*tileY);
+		//player->setPosition(target);
+		FiniteTimeAction* actionMove = MoveTo::create(0.05f, target);
+		npcSprites[i]->runAction(actionMove);
+	}
 }
 
 void CruxScene::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event)

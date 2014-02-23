@@ -5,10 +5,12 @@
 // largely be contained in this function.
 
 #include "CruxMap.h"
+#include "CruxNPC.h"
 #include "CruxCommon.h"
 #include "CruxPlayer.h"
 
 #include <string>
+#include <vector>
 using std::string;
 
 namespace Crux
@@ -63,6 +65,9 @@ namespace Crux
             // returns reference to the player
             const Player* getPlayer() const { return player; }
 
+			const NPC& getNPC(int i) const {return npclist[i];}
+			int numNPCs() const {return npclist.size();}
+
         private:
             // perform npc moves
             void performNPCMoves();
@@ -91,6 +96,9 @@ namespace Crux
             
             // player
             Player* player;
+
+			// NPCs
+			vector<NPC> npclist;
 
             // delegate
             GameDelegate* delegate;

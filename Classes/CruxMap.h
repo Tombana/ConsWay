@@ -44,6 +44,8 @@ namespace Crux
             // of this file
             char val(int i, int j);
 
+
+
             int getWidth() const { return w; };
             int getHeight() const { return h; }; 
 
