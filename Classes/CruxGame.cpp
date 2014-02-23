@@ -81,6 +81,7 @@ namespace Crux
 
         gameState = NPC_TURN;
 
+        update();
         performNPCMoves();
 
         player->setActionPoints(apPerTurn);
