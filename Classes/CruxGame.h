@@ -4,6 +4,7 @@
 // largely be contained in this function.
 
 #include "CruxMap.h"
+#include "CruxNPC.h"
 
 namespace Crux
 {
@@ -94,6 +95,9 @@ namespace Crux
             
             // player
             Player player;
+
+			// NPCs
+			vector<NPC> npclist;
 
             // delegate
             GameDelegate* delegate;
