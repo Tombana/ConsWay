@@ -5,7 +5,7 @@
 using std::cerr;
 using std::endl;
 
-namespace ConsWay
+namespace Crux
 {
     Game::Game()
     {
@@ -21,7 +21,8 @@ namespace ConsWay
 
     bool Game::initialize(GameDelegate* _delegate)
     {
-        map = new Map(10, 10, "Resources/testmap.txt");
+        // TODO: should be contents of file
+        map = new Map(4, 2, "****====");
         delegate = _delegate;
 
         finalx = 9;

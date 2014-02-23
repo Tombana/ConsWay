@@ -5,7 +5,7 @@
 
 #include "ConwayMap.h"
 
-namespace ConsWay
+namespace Crux
 {
     typedef enum 
     {
