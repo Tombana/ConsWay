@@ -47,8 +47,13 @@ bool CruxScene::init()
 
     //Title
     auto label = LabelTTF::create("--~~** Crux **~~--", "Arial", 24);
-    label->setPosition(Point(origin.x + visibleSize.width/2, origin.y + visibleSize.height - label->getContentSize().height));
+    label->setPosition(Point(origin.x + visibleSize.width/2, origin.y + visibleSize.height - label->getContentSize().height * 0.5));
     this->addChild(label, 1);
+
+    actionPointsLabel = LabelTTF::create("Action Points: ", "Arial", 24);
+    actionPointsLabel->setPosition(Point(actionPointsLabel->getContentSize().width * 0.5 + 10, visibleSize.height - actionPointsLabel->getContentSize().height * 0.5 - 10));
+    actionPointsLabel->enableStroke(Color3B::BLACK, 15.0f);
+    this->addChild(actionPointsLabel, 6);
 
     // add "CruxScene" splash screen"
     //auto sprite = Sprite::create("CruxScene.png");
@@ -171,6 +176,11 @@ void CruxScene::gameUpdated()
     //player->setPosition(target);
     FiniteTimeAction* actionMove = MoveTo::create(0.05f, target);
     player->runAction(actionMove);
+
+    //update action points
+    stringstream ss("Action Points: ");
+    ss << ss.rdbuf() << game->getPlayer()->getActionPoints();
+    actionPointsLabel->setString(ss.str());
 }
 
 void CruxScene::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event)

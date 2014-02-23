@@ -87,6 +87,8 @@ namespace Crux
 
         player->setActionPoints(apPerTurn);
         gameState = PLAYER_TURN;
+
+        delegate->gameUpdated();
     }
 
     void Game::checkLegalSquare()
