@@ -19,7 +19,7 @@ namespace Crux
         PLAYER_TURN,
         NPC_TURN,
         PLAYER_LOST,
-        PLAYER_WON,
+        PLAYER_WON
     } STATE;
 
     class GameDelegate
@@ -60,6 +60,7 @@ namespace Crux
             // returns the map
             Map* getMap() const { return map; };
 
+            // returns reference to the player
             const Player* getPlayer() const { return player; }
 
         private:

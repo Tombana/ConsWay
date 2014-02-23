@@ -12,6 +12,7 @@ namespace Crux
     Game::Game()
     {
         map = 0;
+        player = 0;
     }
 
     Game::~Game()
@@ -28,18 +29,22 @@ namespace Crux
         int w, h; 
         sin >> w >> h;
 
-        // TODO: should read contents of file?
+        if(map)
+            delete map;
+
         map = new Map(w, h);
         map->initFromConfiguration(sin);
         delegate = _delegate;
 
-        finalx = 9;
-        finaly = 9;
+        finalx = 19;
+        finaly = 19;
 
         gameState = PLAYER_TURN;
 
         apPerTurn = 3;
 
+        if(player)
+            delete player;
         player = new Player();
 
         delegate->gameUpdated();
@@ -77,7 +82,7 @@ namespace Crux
 
     void Game::finishPlayerTurn()
     {
-        if(!gameState == PLAYER_TURN)
+        if(!(gameState == PLAYER_TURN))
             return;
 
         gameState = NPC_TURN;
@@ -87,6 +92,8 @@ namespace Crux
 
         player->setActionPoints(apPerTurn);
         gameState = PLAYER_TURN;
+
+        delegate->gameUpdated();
     }
 
     void Game::checkLegalSquare()

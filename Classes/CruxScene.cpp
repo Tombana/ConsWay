@@ -26,6 +26,18 @@ CruxScene::~CruxScene()
     delete game;
 }
 
+void CruxScene::initializeGame()
+{
+    if(game)
+        delete game;
+
+    game = new Game();
+
+    //Load game
+    std::string mapdata = FileUtils::getInstance()->getStringFromFile("testmap.txt");
+    game->initialize(this, mapdata);
+}
+
 bool CruxScene::init()
 {
     if ( !Layer::init() )
@@ -43,12 +55,25 @@ bool CruxScene::init()
 
     auto menu = Menu::create(closeItem, NULL);
     menu->setPosition(Point::ZERO);
-    this->addChild(menu, 1);
+    //this->addChild(menu, 1);
 
     //Title
     auto label = LabelTTF::create("--~~** Crux **~~--", "Arial", 24);
-    label->setPosition(Point(origin.x + visibleSize.width/2, origin.y + visibleSize.height - label->getContentSize().height));
+    label->setPosition(Point(origin.x + visibleSize.width/2, origin.y + visibleSize.height - label->getContentSize().height * 0.5));
     this->addChild(label, 1);
+
+    actionPointsLabel = LabelTTF::create("Action Points: ", "Arial", 24);
+    actionPointsLabel->setPosition(Point(actionPointsLabel->getContentSize().width * 0.5 + 10, visibleSize.height - actionPointsLabel->getContentSize().height * 0.5 - 10));
+    this->addChild(actionPointsLabel, 6);
+
+    gameStateLabel = LabelTTF::create("Game State: ", "Arial", 24);
+    gameStateLabel->setPosition(Point(gameStateLabel->getContentSize().width * 0.5 + 10, visibleSize.height - gameStateLabel->getContentSize().height - 20));
+    this->addChild(gameStateLabel, 6);
+
+    initializeGame();
+
+    int w = game->getMap()->getWidth();
+    int h = game->getMap()->getHeight();
 
     // add "CruxScene" splash screen"
     //auto sprite = Sprite::create("CruxScene.png");
@@ -61,12 +86,6 @@ bool CruxScene::init()
     this->addChild(player, 5);
 
     this->runAction(Follow::create(player));
-
-    //Load game
-    std::string mapdata = FileUtils::getInstance()->getStringFromFile("testmap.txt");
-    game->initialize(this, mapdata);
-    int w = game->getMap()->getWidth();
-    int h = game->getMap()->getHeight();
 
     auto batchNode = SpriteBatchNode::create("tiles.png", w*h);
     tileX = batchNode->getTexture()->getPixelsWide() / 4;
@@ -173,6 +192,16 @@ void CruxScene::gameUpdated()
     //player->setPosition(target);
     FiniteTimeAction* actionMove = MoveTo::create(0.05f, target);
     player->runAction(actionMove);
+
+    //update action points label
+    stringstream ss("Action Points: ");
+    ss << ss.rdbuf() << game->getPlayer()->getActionPoints();
+    actionPointsLabel->setString(ss.str());
+
+    //update game state label
+    ss.str("Game State: ");
+    ss << ss.rdbuf() << (int)game->getGameState();
+    gameStateLabel->setString(ss.str());
 }
 
 void CruxScene::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
@@ -192,6 +221,12 @@ void CruxScene::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
             break;
         case EventKeyboard::KeyCode::KEY_A:
             game->finishPlayerTurn();
+            break;
+        case EventKeyboard::KeyCode::KEY_R:
+            initializeGame();
+            break;
+        case EventKeyboard::KeyCode::KEY_ESCAPE:
+            Director::getInstance()->end();
             break;
         default:
             break;
