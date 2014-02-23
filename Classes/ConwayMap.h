@@ -37,6 +37,9 @@ namespace ConsWay
             // write the current map to a file
             void write(std::string outputFile);
 
+            int getWidth() const { return n; };
+            int getHeight() const { return m; }; 
+
         private:
             int n;
             int m;
