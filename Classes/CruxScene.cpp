@@ -60,6 +60,8 @@ bool CruxScene::init()
     player->setPosition(Point(visibleSize.width/2 + origin.x, visibleSize.height/2 + origin.y));
     this->addChild(player, 5);
 
+    this->runAction(Follow::create(player));
+
     //Load game
     std::string mapdata = FileUtils::getInstance()->getStringFromFile("testmap.txt");
     game->initialize(this, mapdata);
@@ -162,8 +164,8 @@ void CruxScene::gameLoop(float dt)
 void CruxScene::gameUpdated()
 {
     if(tileSprites.empty()) return;
-    for(int x = 0; x < tileSprites.size(); ++x)
-        for(int y = 0; y < tileSprites[0].size(); ++y)
+    for(int x = 0; x < (int)tileSprites.size(); ++x)
+        for(int y = 0; y < (int)tileSprites[0].size(); ++y)
             tileSprites[x][y]->setTextureRect( getRect( game->getMap()->val(x,y) ) );
     Pos2 p = game->getPlayer()->getPosition();
     Point origin = Director::getInstance()->getVisibleOrigin();
