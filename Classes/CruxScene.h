@@ -39,7 +39,12 @@ public:
 private:
     Game* game;
     Sprite* player;
+
+    int tileX;
+    int tileY;
     vector< vector<Sprite*> > tileSprites;
+
+    Rect getRect(char type);
 };
 
 #endif // __CRUXSCENE_H__

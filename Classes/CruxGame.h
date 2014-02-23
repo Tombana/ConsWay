@@ -1,3 +1,4 @@
+#pragma once
 // 'Game' contains the main game logic, and references to the 
 // players, npcs, the map etc. The update function should be
 // called with an elapsed time, and the main game logic will
@@ -40,6 +41,9 @@ namespace Crux
             // map, player, start and end points, etc.
             bool initialize(GameDelegate*  _delegate, string mapConfiguration);
 
+            // updates the game (one step)
+            void update();
+
             // finishes the player turn
             void finishTurn();
 
@@ -56,13 +60,11 @@ namespace Crux
             // returns the map
             Map* getMap() const { return map; };
 
-            const Player* getPlayer() const { return &player; }
+            const Player* getPlayer() const { return player; }
 
         private:
             // perform npc moves
             void performNPCMoves();
-            // updates the game (one step)
-            void update();
 
             // checks if the player is on a legal square. Note
             // that this can be the final square, so this should

@@ -1,3 +1,4 @@
+#pragma once
 // Instances of this class will represent the map. we have
 // the following legend: 
 // 
