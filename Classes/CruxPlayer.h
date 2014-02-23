@@ -1,5 +1,6 @@
 #include "CruxCommon.h"
 #include "CruxAbility.h"
+#include "CruxMap.h"
 
 namespace Crux
 {
@@ -15,7 +16,7 @@ namespace Crux
             void setActionPoints(int _ap) { actionPoints = ap; }
 
             // this moves the player one square to the left,
-            void move(DIRECTION dir);
+            void move(DIRECTION dir, Map* map);
 
             // this makes the player use a certain ability, 
             // in a certain DIRECTION

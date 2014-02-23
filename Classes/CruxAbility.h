@@ -5,5 +5,8 @@ namespace Crux
         public:
             Ability() { };
             ~Ability() { };
+
+        private:
+            int apCost;
     };
 }

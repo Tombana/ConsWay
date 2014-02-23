@@ -52,6 +52,10 @@ namespace Crux
             // returns the current game state
             STATE getGameState() { return gameState; };
 
+            // moves the player and updates game logic, checking if
+            // player is still valid
+            void move(DIRECTION dir);
+
             // returns the map
             Map* getMap() const { return map; };
 
