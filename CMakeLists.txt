@@ -43,6 +43,8 @@ set(GAME_SRC
   proj.linux/main.cpp
   Classes/AppDelegate.cpp
   Classes/HelloWorldScene.cpp
+  Classes/ConwayGame.cpp
+  Classes/ConwayMap.cpp
 )
 
 set(COCOS2D_ROOT ${CMAKE_SOURCE_DIR}/cocos2d)

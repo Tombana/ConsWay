@@ -32,10 +32,10 @@ namespace ConsWay
     class GameDelegate
     {
         public: 
-            GameDelegate();
-            virtual ~GameDelegate();
+            GameDelegate() {};
+            virtual ~GameDelegate() {};
 
-            virtual void gameUpdated();
+            virtual void gameUpdated() = 0;
     };
 
     class Game
