@@ -3,6 +3,7 @@
 
 #include "cocos2d.h"
 #include "CruxGame.h"
+#include <vector>
 
 using namespace Crux;
 using namespace cocos2d;
@@ -39,6 +40,7 @@ public:
 private:
     Game* game;
     Sprite* player;
+	vector<Sprite*> npcSprites;
 
     int tileX;
     int tileY;

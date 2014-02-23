@@ -41,6 +41,9 @@ namespace Crux
         apPerTurn = 3;
 
         player = new Player();
+		
+		NPC tmp(HORSE, Pos2(4,4));
+		npclist.push_back(tmp);	
 
         delegate->gameUpdated();
         return true;
@@ -48,6 +51,8 @@ namespace Crux
 
     void Game::performNPCMoves()
     {
+		for(int i=0; i<npclist.size(); i++)
+			npclist[i].move(map, player->getPosition());
         // update npc moves
     }
     

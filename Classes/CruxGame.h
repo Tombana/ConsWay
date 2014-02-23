@@ -10,6 +10,7 @@
 #include "CruxPlayer.h"
 
 #include <string>
+#include <vector>
 using std::string;
 
 namespace Crux
@@ -62,6 +63,9 @@ namespace Crux
             Map* getMap() const { return map; };
 
             const Player* getPlayer() const { return player; }
+
+			const NPC& getNPC(int i) const {return npclist[i];}
+			int numNPCs() const {return npclist.size();}
 
         private:
             // perform npc moves

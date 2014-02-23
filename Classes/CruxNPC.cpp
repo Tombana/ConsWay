@@ -1,36 +1,44 @@
-#include <CruxNPC.h>
-#include <vector.h>
+#include "CruxNPC.h"
+#include <vector>
+#include <iostream>
 
-void move(Map _mp, Pos2 target) {			
-	switch type {
+
+void NPC::move(Map* _mp, Pos2 target) {	
+	switch(type){
 		case HORSE://Horses are greedy
+			{
 			int bestSqDist=-1;
 			Pos2 bestJmp;
 			for(int dx=-2; dx<=2; dx++)
 				for(int dy=-2; dy<=2; dy++) {
 					if(dx*dx +dy*dy != 5) continue;
 					Pos2 jmp(pos.x+dx,pos.y+dy);
-					char type=_mp.val(jmp.x,jmp.y);
+					char type=_mp->val(jmp.x,jmp.y);
 					if(type == 0 || type == '*' || type == '#') continue;
 					if(bestSqDist < 0 || target.sqdist(jmp) < bestSqDist) {
+						bestSqDist=target.sqdist(jmp);
 						bestJmp=jmp;
 					}
 				}
 			if(bestSqDist == -1) return;
 			pos=bestJmp;
-		break;
+			}
+			break;
 		case GREEDY:
+			{
 			int dx=target.x-pos.x,dy=target.y-pos.y;
 			dx=(dx<0)-(dx>0);
 			dy=(dy<0)-(dy>0);
 			Pos2 walk=Pos2(pos.x+dx,pos.y+dy);
 
-			char type=mp.val(walk.x,walk.y);
+			char type=_mp->val(walk.x,walk.y);
 			if(type == '*' || type == '#' || type == 0) return;
 			pos=walk;
-		break;
+			}
+			break;
 		case BFS:
-			vector<vector<int> > visited(_mp.getWidth(),vector<int>(_mp.getHeight(),0));
+			{
+			vector<vector<int> > visited(_mp->getWidth(),vector<int>(_mp->getHeight(),0));
 
 			vector<Pos2> q;
 			q.push_back(pos);
@@ -47,7 +55,7 @@ void move(Map _mp, Pos2 target) {
 				q.pop_back();
 				for(int dx=-1; dx<2;dx++)
 					for(int dy=-1; dy<2; dy++) {
-						char type=_mp.val(pos.x+dx,pos.y+dy);
+						char type=_mp->val(pos.x+dx,pos.y+dy);
 						if(type == 0 || type == '#' || type == '*') continue;
 						if(visited[pos.x+dx][pos.y+dy]) continue;
 						int dir=visited[pos.x][pos.y];
@@ -57,31 +65,34 @@ void move(Map _mp, Pos2 target) {
 					}
 				first=false;
 			}
-
-		break;
+			}
+			break;
 		case RANDOM:
+			{
 			Pos2 walk(pos.x+(random()%3-1),pos.y+(random()%3-1));
-			char type=mp.val(walk.x,walk.y);
+			char type=_mp->val(walk.x,walk.y);
 			if(type == 0 || type == '*' || type == '#') return;
 			pos=walk;
-		break;
+			}
+			break;
 		case WALLBUG:
+			{
 			for(int dx=-1;dx<2;dx++)
 				for(int dy=-1;dy<2; dy++) {
 					if(dx*dx+dy*dy != 2) continue;
-					
+
 				}
-		break;
+			}
+			break;
+		default:
+			break;
 
 	}
 }
 
-NPC(int _type, Pos2 _pos) {
+NPC::NPC(NPCTYPE _type, Pos2 _pos) {
 	type=_type;
 	pos=_pos;
 }
 
-~NPC() {
-
-}
 

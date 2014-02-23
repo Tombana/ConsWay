@@ -60,11 +60,29 @@ bool CruxScene::init()
     player->setPosition(Point(visibleSize.width/2 + origin.x, visibleSize.height/2 + origin.y));
     this->addChild(player, 5);
 
+
+
     //Load game
     std::string mapdata = FileUtils::getInstance()->getStringFromFile("testmap.txt");
     game->initialize(this, mapdata);
     int w = game->getMap()->getWidth();
     int h = game->getMap()->getHeight();
+
+	//Create NPC sprite
+	for(int i=0; i<game->numNPCs(); i++) {
+		string imgName="";
+		switch(game->getNPC(i).getType()) {
+			case HORSE:
+				imgName="HORSE.png";
+			break;
+			//TODO: add other types
+		}
+
+		auto sprt = Sprite::create(imgName);
+		sprt->setPosition(Point(visibleSize.width/2 + origin.x, visibleSize.height/2 + origin.y));
+		this->addChild(sprt, 5);
+		npcSprites.push_back(sprt);
+	}
 
     auto batchNode = SpriteBatchNode::create("tiles.png", w*h);
     tileX = batchNode->getTexture()->getPixelsWide() / 4;
@@ -171,6 +189,15 @@ void CruxScene::gameUpdated()
     //player->setPosition(target);
     FiniteTimeAction* actionMove = MoveTo::create(0.05f, target);
     player->runAction(actionMove);
+
+	for(int i=0; i<npcSprites.size(); i++) {
+		Point origin = Director::getInstance()->getVisibleOrigin();
+		Pos2 p=game->getNPC(i).getPos();
+		Point target = origin + Point(tileX/2,tileY/2) + Point(p.x*tileX, p.y*tileY);
+		//player->setPosition(target);
+		FiniteTimeAction* actionMove = MoveTo::create(0.05f, target);
+		npcSprites[i]->runAction(actionMove);
+	}
 }
 
 void CruxScene::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
