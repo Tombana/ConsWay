@@ -65,10 +65,23 @@ namespace Crux
             return;
 
         player->move(dir, map);
+
         checkLegalSquare();
         checkFinalSquare();
 
         delegate->gameUpdated();
+    }
+
+    void Game::finishPlayerTurn()
+    {
+        if(!gameState == PLAYER_TURN)
+            return;
+
+        gameState = NPC_TURN;
+
+        performNPCMoves();
+
+        gameState = PLAYER_TURN;
     }
 
     void Game::checkLegalSquare()

@@ -59,6 +59,9 @@ namespace Crux
 
     char Map::val(int i, int j)
     {
+        if((i < 0 || i >= w) || (j < 0 || j >= h)) {
+            return -1;
+        }
         return grid[i][j];
     }
 

@@ -50,6 +50,9 @@ namespace Crux
             // player is still valid
             void move(DIRECTION dir);
 
+            // this finishes a turn, and lets the NPCs do their moves
+            void finishPlayerTurn();
+
             // returns the map
             Map* getMap() const { return map; };
 

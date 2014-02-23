@@ -36,11 +36,11 @@ namespace Crux
             // dt seconds, where dt is the time between 'gameturns'.
             void step(); 
 
-            // returns the integer value of the square at (i, j)
+            // returns the char value of the square at (i, j)
             // where 0 <= i < n, 0 <= j < m. returns -1 if the 
-            // square is out of bouds. The integer value is the 
-            // color of the square, for future support of multiple
-            // colors
+            // square is out of bouds. The char value is the 
+            // type of the square, see the legend at the top
+            // of this file
             char val(int i, int j);
 
             int getWidth() const { return w; };
