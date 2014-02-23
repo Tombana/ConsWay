@@ -1,4 +1,4 @@
-#include "ConwayGame.h"
+#include "CruxGame.h"
 
 #include <iostream>
 
@@ -85,7 +85,7 @@ namespace Crux
 
     void Game::checkLegalSquare()
     {
-        if(map->val(player.x, player.y) == 1) {
+        if(map->val(player.x, player.y) == '*') {
             // game over
             gameState = GAMEOVER;
         }

@@ -1,4 +1,4 @@
-#include "ConwayMap.h"
+#include "CruxMap.h"
 
 #include <iostream>
 #include <sstream>

@@ -3,7 +3,7 @@
 // called with an elapsed time, and the main game logic will
 // largely be contained in this function.
 
-#include "ConwayMap.h"
+#include "CruxMap.h"
 
 namespace Crux
 {
