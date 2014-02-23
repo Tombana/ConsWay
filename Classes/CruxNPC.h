@@ -17,8 +17,8 @@ class NPC {
 	int type;
 	
 	public:
-	void move(Map _mp, Point target);			
-	NPC(int _type, Point _pos);
+	void move(Map _mp, Pos2 target);			
+	NPC(int _type, Pos2 _pos);
 	~NPC();
 }
 
