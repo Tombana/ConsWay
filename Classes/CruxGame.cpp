@@ -37,6 +37,8 @@ namespace Crux
         finalx = 9;
         finaly = 9;
 
+        apPerTurn = 3;
+
         player = new Player();
 
         delegate->gameUpdated();
@@ -81,6 +83,7 @@ namespace Crux
 
         performNPCMoves();
 
+        player->setActionPoints(apPerTurn);
         gameState = PLAYER_TURN;
     }
 

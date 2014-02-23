@@ -23,6 +23,8 @@ namespace Crux
 
     void Player::move(DIRECTION dir, Map* map)
     {
+        if(actionPoints <= 0) return;
+
         switch(dir) {
             case UP:
                 if(position.y == (map->getHeight() - 1))

@@ -74,6 +74,9 @@ namespace Crux
             int finalx;
             int finaly;
 
+            // action points (player) per turn:
+            int apPerTurn;
+
             // finishes the game, reinitialize??
             void gameOver();
 
