@@ -4,11 +4,12 @@
 USING_NS_CC;
 
 AppDelegate::AppDelegate() {
-
+    game = 0;
 }
 
 AppDelegate::~AppDelegate() 
 {
+    if( game ) delete game;
 }
 
 bool AppDelegate::applicationDidFinishLaunching() {
@@ -23,6 +24,8 @@ bool AppDelegate::applicationDidFinishLaunching() {
 
     // set FPS. the default value is 1.0/60 if you don't call this
     director->setAnimationInterval(1.0 / 60);
+
+    game = new Game;
 
     // create a scene. it's an autorelease object
     auto scene = HelloWorld::createScene();
@@ -47,4 +50,9 @@ void AppDelegate::applicationWillEnterForeground() {
 
     // if you use SimpleAudioEngine, it must resume here
     // SimpleAudioEngine::sharedEngine()->resumeBackgroundMusic();
+}
+
+void AppDelegate::gameUpdated()
+{
+    return;
 }
