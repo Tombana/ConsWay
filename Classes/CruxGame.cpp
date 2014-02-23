@@ -12,7 +12,6 @@ namespace Crux
     Game::Game()
     {
         map = 0;
-        gameState = PLAYER_TURN;
     }
 
     Game::~Game()
@@ -37,6 +36,8 @@ namespace Crux
         finalx = 9;
         finaly = 9;
 
+        gameState = PLAYER_TURN;
+
         apPerTurn = 3;
 
         player = new Player();
@@ -54,7 +55,7 @@ namespace Crux
     {
         if(!(gameState < PLAYER_LOST))
             return; 
-        
+
         map->step();
         checkLegalSquare();
 

@@ -60,7 +60,7 @@ bool CruxScene::init()
     this->addChild(player, 5);
 
     //Load game
-    game->initialize(this, "3 6 **||~~##..//==*|.~");
+    game->initialize(this, "3 6 ##||~~##..//==*|.~");
     int w = game->getMap()->getWidth();
     int h = game->getMap()->getHeight();
 
@@ -159,15 +159,13 @@ void CruxScene::gameLoop(float dt)
 //Callback from game
 void CruxScene::gameUpdated()
 {
-    //for(int x = 0; x < tileSprites.size(); ++x)
-    //    for(int y = 0; y < tileSprites[0].size(); ++y)
-    //        tileSprites[x][y]->setTexture( game->getMap()->val(x,y) ? "tilea.png" : "tileb.png" );
-    //if(tileSprites.empty()) return;
-    //Size visibleSize = Director::getInstance()->getVisibleSize();
-    //int x = game->getPlayer()->x;
-    //int y = game->getPlayer()->y;
-    //auto sq = tileSprites[0][0];
-    //player->setPosition(Point( visibleSize.width/2 + x * sq->getContentSize().width, visibleSize.height/2 + y * sq->getContentSize().height ) );
+    if(tileSprites.empty()) return;
+    for(int x = 0; x < tileSprites.size(); ++x)
+        for(int y = 0; y < tileSprites[0].size(); ++y)
+            tileSprites[x][y]->setTextureRect( getRect( game->getMap()->val(x,y) ) );
+    Pos2 p = game->getPlayer()->getPosition();
+    Point origin = Director::getInstance()->getVisibleOrigin();
+    player->setPosition(origin + Point(tileX/2,tileY/2) + Point(p.x*tileX, p.y*tileY));
 }
 
 void CruxScene::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
@@ -185,7 +183,7 @@ void CruxScene::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
         case EventKeyboard::KeyCode::KEY_RIGHT_ARROW:
             game->move(RIGHT);
             break;
-        case EventKeyboard::KeyCode::KEY_RETURN:
+        case EventKeyboard::KeyCode::KEY_A:
             game->finishPlayerTurn();
             break;
         default:

@@ -19,6 +19,7 @@ namespace Crux
     {
         position.x = 0;
         position.y = 0;
+        actionPoints = 3;
     }
 
     void Player::move(DIRECTION dir, Map* map)
@@ -50,6 +51,7 @@ namespace Crux
                 cerr << "ERROR: Unknown move command: " << dir << endl;
                 break;
         }
+        actionPoints--;
     }
 
 }
