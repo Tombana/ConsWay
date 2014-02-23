@@ -35,6 +35,11 @@ namespace Crux
         return true;
     }
 
+    void Game::performNPCMoves()
+    {
+        // update npc moves
+    }
+    
     void Game::update()
     {
         if(!(gameState < PLAYER_LOST))

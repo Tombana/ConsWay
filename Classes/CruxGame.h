@@ -53,11 +53,11 @@ namespace Crux
             // map, player, start and end points, etc.
             bool initialize(GameDelegate*  _delegate);
 
-            // updates the game (one step)
-            void update();
-
             // this moves the player one square to the left,
             void move(DIRECTION dir);
+
+            // finishes the player turn
+            void finishTurn();
 
             // returns the current game state
             STATE getGameState() { return gameState; };
@@ -68,6 +68,11 @@ namespace Crux
             const Player* getPlayer() const { return &player; }
 
         private:
+            // perform npc moves
+            void performNPCMoves();
+            // updates the game (one step)
+            void update();
+
             // checks if the player is on a legal square. Note
             // that this can be the final square, so this should
             // be called before checkFinalSquare
