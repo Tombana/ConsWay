@@ -29,6 +29,8 @@ public:
 
     void gameUpdated();
     Game* game;
+
+    vector< vector<cocos2d::Sprite*> > tileSprites;
 };
 
 #endif // __HELLOWORLD_SCENE_H__

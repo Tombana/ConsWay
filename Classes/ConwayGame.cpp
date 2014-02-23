@@ -10,6 +10,7 @@ namespace ConsWay
     Game::Game()
     {
         map = 0;
+        gameState = ACTIVE;
     }
 
     Game::~Game()

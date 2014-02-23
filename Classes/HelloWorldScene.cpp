@@ -72,22 +72,28 @@ bool HelloWorld::init()
     this->addChild(label, 1);
 
     // add "HelloWorld" splash screen"
-    auto sprite = Sprite::create("HelloWorld.png");
+    //auto sprite = Sprite::create("HelloWorld.png");
+    //sprite->setPosition(Point(visibleSize.width/2 + origin.x, visibleSize.height/2 + origin.y));
+    //this->addChild(sprite, 0);
 
-    // position the sprite on the center of the screen
-    sprite->setPosition(Point(visibleSize.width/2 + origin.x, visibleSize.height/2 + origin.y));
-
-    // add the sprite as a child to this layer
-    this->addChild(sprite, 0);
-
-    // ---------------
-    // Add the awesome local player sprite
 
     auto player = Sprite::create("Player.png");
     player->setPosition(Point(visibleSize.width/2 + origin.x, visibleSize.height/2 + origin.y));
-    this->addChild(player);
+    this->addChild(player, 5);
 
     this->schedule( schedule_selector(HelloWorld::gameLogic), 1.0 );
+
+    int w = game->getMap()->getWidth();
+    int h = game->getMap()->getHeight();
+    tileSprites = vector< vector<Sprite*> > ( w, vector<Sprite*>(h, 0) );
+    for(int x = 0; x < w; ++x)
+        for(int y = 0; y < h; ++y)
+        {
+            auto sq = Sprite::create("Projectile.png");
+            sq->setPosition(Point( visibleSize.width/2 + x * sq->getContentSize().width, visibleSize.height/2 + y * sq->getContentSize().height ) );
+            this->addChild(sq);
+            tileSprites[x][y] = sq;
+        }
     
     return true;
 }
@@ -120,6 +126,7 @@ void HelloWorld::addEnemy()
     int actualDuration = ( rand() % rangeDuration ) + minDuration;
 
     std::function<void(Node*)> callbackFunction = std::bind( &HelloWorld::spriteMoveFinished, this, std::placeholders::_1 );
+
     // Create the actions
     FiniteTimeAction* actionMove;
     FiniteTimeAction* actionMoveDone;
@@ -137,14 +144,15 @@ void HelloWorld::spriteMoveFinished(Node* sender)
 
 void HelloWorld::gameLogic(float dt)
 {
-    addEnemy();
     game->move(UP);
     game->update();
 }
 
 void HelloWorld::gameUpdated()
 {
-    //TODO: tile update
+    for(int x = 0; x < tileSprites.size(); ++x)
+        for(int y = 0; y < tileSprites[0].size(); ++y)
+            tileSprites[x][y]->setVisible( game->getMap()->val(x,y) );
 }
 
 void HelloWorld::menuCloseCallback(Object* pSender)
