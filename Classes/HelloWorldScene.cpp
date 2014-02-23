@@ -2,6 +2,7 @@
 
 USING_NS_CC;
 
+
 Scene* HelloWorld::createScene()
 {
     // 'scene' is an autorelease object
@@ -97,6 +98,19 @@ bool HelloWorld::init()
     
     return true;
 }
+
+void HelloWorld::drawTile() {
+	
+    auto white = Sprite::create("tilea.png");
+    auto black = Sprite::create("tileb.png");
+	for(int x=0; x<10; x++)
+		for(int y=0; y<10; y++) {
+			player->setPosition(Point(k*visibleSize.width/10 + origin.x, l*visibleSize.height/2 + origin.y));
+			player->setPosition(Point(k*visibleSize.width/10 + origin.x, l*visibleSize.height/2 + origin.y));
+		}
+    this->addChild(player);
+}
+
 
 void HelloWorld::addEnemy()
 {
