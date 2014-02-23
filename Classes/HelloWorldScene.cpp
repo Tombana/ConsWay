@@ -17,6 +17,11 @@ Scene* HelloWorld::createScene()
     return scene;
 }
 
+HelloWorld::~HelloWorld()
+{
+    if(game) delete game;
+}
+
 // on "init" you need to initialize your instance
 bool HelloWorld::init()
 {
@@ -26,6 +31,9 @@ bool HelloWorld::init()
     {
         return false;
     }
+
+    game = new Game();
+    game->initialize(this);
     
     Size visibleSize = Director::getInstance()->getVisibleSize();
     Point origin = Director::getInstance()->getVisibleOrigin();
@@ -130,6 +138,13 @@ void HelloWorld::spriteMoveFinished(Node* sender)
 void HelloWorld::gameLogic(float dt)
 {
     addEnemy();
+    game->move(UP);
+    game->update();
+}
+
+void HelloWorld::gameUpdated()
+{
+    //TODO: tile update
 }
 
 void HelloWorld::menuCloseCallback(Object* pSender)

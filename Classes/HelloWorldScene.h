@@ -2,8 +2,10 @@
 #define __HELLOWORLD_SCENE_H__
 
 #include "cocos2d.h"
+#include "ConwayGame.h"
 
-class HelloWorld : public cocos2d::Layer
+using namespace ConsWay;
+class HelloWorld : public cocos2d::Layer, public GameDelegate
 {
 public:
     // there's no 'id' in cpp, so we recommend returning the class instance pointer
@@ -21,6 +23,12 @@ public:
     
     // implement the "static create()" method manually
     CREATE_FUNC(HelloWorld);
+
+    //-------------------------
+    virtual ~HelloWorld();
+
+    void gameUpdated();
+    Game* game;
 };
 
 #endif // __HELLOWORLD_SCENE_H__

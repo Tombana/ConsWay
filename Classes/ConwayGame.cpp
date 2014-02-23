@@ -20,7 +20,7 @@ namespace ConsWay
 
     bool Game::initialize(GameDelegate* _delegate)
     {
-        map = new Map(10, 10, "testmap.txt");
+        map = new Map(10, 10, "Resources/testmap.txt");
         delegate = _delegate;
 
         finalx = 10;
@@ -28,6 +28,9 @@ namespace ConsWay
 
         player.x = 0;
         player.y = 0;
+
+        delegate->gameUpdated();
+        return true;
     }
 
     void Game::update()
