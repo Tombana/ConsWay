@@ -1,4 +1,5 @@
 #include "CruxScene.h"
+#include <string>
 #include <iostream>
 using namespace std;
 
@@ -60,7 +61,8 @@ bool CruxScene::init()
     this->addChild(player, 5);
 
     //Load game
-    game->initialize(this, "3 6 ##||~~##..//==*|.~");
+    std::string mapdata = FileUtils::getInstance()->getStringFromFile("testmap.txt");
+    game->initialize(this, mapdata);
     int w = game->getMap()->getWidth();
     int h = game->getMap()->getHeight();
 
@@ -165,7 +167,10 @@ void CruxScene::gameUpdated()
             tileSprites[x][y]->setTextureRect( getRect( game->getMap()->val(x,y) ) );
     Pos2 p = game->getPlayer()->getPosition();
     Point origin = Director::getInstance()->getVisibleOrigin();
-    player->setPosition(origin + Point(tileX/2,tileY/2) + Point(p.x*tileX, p.y*tileY));
+    Point target = origin + Point(tileX/2,tileY/2) + Point(p.x*tileX, p.y*tileY);
+    //player->setPosition(target);
+    FiniteTimeAction* actionMove = MoveTo::create(0.05f, target);
+    player->runAction(actionMove);
 }
 
 void CruxScene::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
