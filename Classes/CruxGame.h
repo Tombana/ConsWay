@@ -60,6 +60,7 @@ namespace Crux
             // returns the map
             Map* getMap() const { return map; };
 
+            // returns reference to the player
             const Player* getPlayer() const { return player; }
 
         private:

@@ -26,6 +26,18 @@ CruxScene::~CruxScene()
     delete game;
 }
 
+void CruxScene::initializeGame()
+{
+    if(game)
+        delete game;
+
+    game = new Game();
+
+    //Load game
+    std::string mapdata = FileUtils::getInstance()->getStringFromFile("testmap.txt");
+    game->initialize(this, mapdata);
+}
+
 bool CruxScene::init()
 {
     if ( !Layer::init() )
@@ -58,6 +70,10 @@ bool CruxScene::init()
     gameStateLabel->setPosition(Point(gameStateLabel->getContentSize().width * 0.5 + 10, visibleSize.height - gameStateLabel->getContentSize().height - 20));
     this->addChild(gameStateLabel, 6);
 
+    initializeGame();
+
+    int w = game->getMap()->getWidth();
+    int h = game->getMap()->getHeight();
 
     // add "CruxScene" splash screen"
     //auto sprite = Sprite::create("CruxScene.png");
@@ -68,12 +84,6 @@ bool CruxScene::init()
     player = Sprite::create("Player.png");
     player->setPosition(Point(visibleSize.width/2 + origin.x, visibleSize.height/2 + origin.y));
     this->addChild(player, 5);
-
-    //Load game
-    std::string mapdata = FileUtils::getInstance()->getStringFromFile("testmap.txt");
-    game->initialize(this, mapdata);
-    int w = game->getMap()->getWidth();
-    int h = game->getMap()->getHeight();
 
     auto batchNode = SpriteBatchNode::create("tiles.png", w*h);
     tileX = batchNode->getTexture()->getPixelsWide() / 4;
@@ -209,6 +219,9 @@ void CruxScene::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
             break;
         case EventKeyboard::KeyCode::KEY_A:
             game->finishPlayerTurn();
+            break;
+        case EventKeyboard::KeyCode::KEY_R:
+            initializeGame();
             break;
         default:
             break;

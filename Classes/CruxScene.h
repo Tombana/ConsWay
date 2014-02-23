@@ -36,6 +36,9 @@ public:
     //Not used
     void addEnemy();
     void spriteMoveFinished(Node* sender);
+
+    void initializeGame();
+
 private:
     Game* game;
     Sprite* player;

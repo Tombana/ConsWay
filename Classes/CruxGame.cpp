@@ -12,6 +12,7 @@ namespace Crux
     Game::Game()
     {
         map = 0;
+        player = 0;
     }
 
     Game::~Game()
@@ -28,7 +29,9 @@ namespace Crux
         int w, h; 
         sin >> w >> h;
 
-        // TODO: should read contents of file?
+        if(map)
+            delete map;
+
         map = new Map(w, h);
         map->initFromConfiguration(sin);
         delegate = _delegate;
@@ -40,6 +43,8 @@ namespace Crux
 
         apPerTurn = 3;
 
+        if(player)
+            delete player;
         player = new Player();
 
         delegate->gameUpdated();
