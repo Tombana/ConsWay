@@ -1,4 +1,14 @@
-// Instances of this class will simulate Conways Game of Life (CGOL)
+// Instances of this class will represent the map. we have
+// the following legend: 
+// 
+// . grass
+// | forest
+// # stone
+// * fire
+// = road
+// ~ water
+// / burned
+//
 // on an (n x m) grid which we be loaded in from a file
 
 #include <string> 
@@ -7,21 +17,20 @@
 using std::string;
 using std::vector;
 
-namespace ConsWay
+namespace Crux
 {
     class Map
     {
         public:
             // initializes a new map of size (n, m) from the 
-            // 'seed' file configFile
-            Map(int _n, int _m, string configFile);
+            // 'seed'  config
+            Map(int _n, int _m, string config);
             ~Map();
 
             // initializes from a ASCII configuration file, which
-            // should contains (n x m) characters, active squares
-            // are indicated by the char '#' and will be given the
-            // value 1
-            bool initFromConfigurationFile(std::string configFile);
+            // is represented a string and should contain (n x m)
+            // characters.
+            bool initFromConfiguration(std::string config);
 
             // simulates one CGOL step this should be called every
             // dt seconds, where dt is the time between 'gameturns'.
@@ -32,10 +41,7 @@ namespace ConsWay
             // square is out of bouds. The integer value is the 
             // color of the square, for future support of multiple
             // colors
-            int val(int i, int j);
-
-            // write the current map to a file
-            void write(std::string outputFile);
+            char val(int i, int j);
 
             int getWidth() const { return n; };
             int getHeight() const { return m; }; 
@@ -43,6 +49,7 @@ namespace ConsWay
         private:
             int n;
             int m;
-            vector<vector<int> > grid;
+            vector<vector<char> > grid;
+            vector<vector<short> > burnTime;
     };
 }

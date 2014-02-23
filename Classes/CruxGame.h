@@ -3,9 +3,9 @@
 // called with an elapsed time, and the main game logic will
 // largely be contained in this function.
 
-#include "ConwayMap.h"
+#include "CruxMap.h"
 
-namespace ConsWay
+namespace Crux
 {
     typedef enum 
     {
@@ -17,9 +17,11 @@ namespace ConsWay
 
     typedef enum 
     {
-        ACTIVE = 1,
-        GAMEOVER,
-        WON
+        IDLE = 1,
+        PLAYER_TURN,
+        NPC_TURN,
+        PLAYER_LOST,
+        PLAYER_WON,
     } STATE;
 
     struct Player
@@ -27,6 +29,9 @@ namespace ConsWay
         // position on the grid
         int x;
         int y;
+
+        // amount of points left this turn
+        int actionPoints;
     };
 
     class GameDelegate

@@ -1,16 +1,16 @@
-#include "ConwayGame.h"
+#include "CruxGame.h"
 
 #include <iostream>
 
 using std::cerr;
 using std::endl;
 
-namespace ConsWay
+namespace Crux
 {
     Game::Game()
     {
         map = 0;
-        gameState = ACTIVE;
+        gameState = PLAYER_TURN;
     }
 
     Game::~Game()
@@ -21,7 +21,8 @@ namespace ConsWay
 
     bool Game::initialize(GameDelegate* _delegate)
     {
-        map = new Map(10, 10, "Resources/testmap.txt");
+        // TODO: should read contents of file?
+        map = new Map(4, 2, "****====");
         delegate = _delegate;
 
         finalx = 9;
@@ -36,7 +37,7 @@ namespace ConsWay
 
     void Game::update()
     {
-        if(!(gameState == ACTIVE))
+        if(!(gameState < PLAYER_LOST))
             return; 
         
         map->step();
@@ -47,7 +48,7 @@ namespace ConsWay
 
     void Game::move(DIRECTION dir)
     {
-        if(!(gameState == ACTIVE))
+        if(!(gameState == PLAYER_TURN))
             return;
 
         switch(dir) {
@@ -84,9 +85,9 @@ namespace ConsWay
 
     void Game::checkLegalSquare()
     {
-        if(map->val(player.x, player.y) == 1) {
+        if(map->val(player.x, player.y) == '*') {
             // game over
-            gameState = GAMEOVER;
+            gameState = PLAYER_LOST;
         }
     }
 
@@ -94,7 +95,7 @@ namespace ConsWay
     {
         if(player.x == finalx && player.y == finaly) {
             // we won the game
-            gameState = WON;
+            gameState = PLAYER_WON;
         }
     }
 

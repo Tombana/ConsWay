@@ -1,89 +1,68 @@
-#include "HelloWorldScene.h"
+#include "CruxScene.h"
 #include <iostream>
 using namespace std;
 
 USING_NS_CC;
 
-
-Scene* HelloWorld::createScene()
+Scene* CruxScene::createScene()
 {
     // 'scene' is an autorelease object
-    auto scene = Scene::create();
-    
     // 'layer' is an autorelease object
-    auto layer = HelloWorld::create();
-
-    // add layer as a child to scene
+    auto scene = Scene::create();
+    auto layer = CruxScene::create();
     scene->addChild(layer);
-
-    // return the scene
     return scene;
 }
 
-HelloWorld::~HelloWorld()
+CruxScene::CruxScene()
 {
-    if(game) delete game;
+    game = new Game();
+    player = 0;
 }
 
-// on "init" you need to initialize your instance
-bool HelloWorld::init()
+CruxScene::~CruxScene()
 {
-    //////////////////////////////
-    // 1. super init first
+    delete game;
+}
+
+bool CruxScene::init()
+{
     if ( !Layer::init() )
-    {
         return false;
-    }
 
     Size visibleSize = Director::getInstance()->getVisibleSize();
     Point origin = Director::getInstance()->getVisibleOrigin();
 
-    /////////////////////////////
-    // 2. add a menu item with "X" image, which is clicked to quit the program
-    //    you may modify it.
-
-    // add a "close" icon to exit the progress. it's an autorelease object
-    auto closeItem = MenuItemImage::create(
-                                           "CloseNormal.png",
+    //Menu with close button
+    auto closeItem = MenuItemImage::create("CloseNormal.png",
                                            "CloseSelected.png",
-                                           CC_CALLBACK_1(HelloWorld::menuCloseCallback, this));
-    
-	closeItem->setPosition(Point(origin.x + visibleSize.width - closeItem->getContentSize().width/2 ,
-                                origin.y + closeItem->getContentSize().height/2));
+                                           CC_CALLBACK_1(CruxScene::menuCloseCallback, this));
+	closeItem->setPosition(origin + Point(visibleSize.width - closeItem->getContentSize().width/2 ,
+                                closeItem->getContentSize().height/2));
 
-    // create menu, it's an autorelease object
     auto menu = Menu::create(closeItem, NULL);
     menu->setPosition(Point::ZERO);
     this->addChild(menu, 1);
 
-    /////////////////////////////
-    // 3. add your codes below...
-
-    // add a label shows "Hello World"
-    // create and initialize a label
-    
-    auto label = LabelTTF::create("Hello World", "Arial", 24);
-    
-    // position the label on the center of the screen
-    label->setPosition(Point(origin.x + visibleSize.width/2,
-                            origin.y + visibleSize.height - label->getContentSize().height));
-
-    // add the label as a child to this layer
+    //Title
+    auto label = LabelTTF::create("--~~** Crux **~~--", "Arial", 24);
+    label->setPosition(Point(origin.x + visibleSize.width/2, origin.y + visibleSize.height - label->getContentSize().height));
     this->addChild(label, 1);
 
-    // add "HelloWorld" splash screen"
-    //auto sprite = Sprite::create("HelloWorld.png");
+    // add "CruxScene" splash screen"
+    //auto sprite = Sprite::create("CruxScene.png");
     //sprite->setPosition(Point(visibleSize.width/2 + origin.x, visibleSize.height/2 + origin.y));
     //this->addChild(sprite, 0);
 
+    //Create player sprite
     player = Sprite::create("Player.png");
     player->setPosition(Point(visibleSize.width/2 + origin.x, visibleSize.height/2 + origin.y));
     this->addChild(player, 5);
 
-    game = new Game();
+    //Load game
     game->initialize(this);
     
-    this->schedule( schedule_selector(HelloWorld::gameLogic), 1.0 );
+    this->schedule( schedule_selector(CruxScene::gameLoop), 1.0 );
 
     int w = game->getMap()->getWidth();
     int h = game->getMap()->getHeight();
@@ -98,14 +77,13 @@ bool HelloWorld::init()
         }
 
     auto listener = EventListenerKeyboard::create();
-    listener->onKeyPressed = CC_CALLBACK_2(HelloWorld::onKeyPressed, this);
-    //EventDispatcher::getInstance()->addEventListenerWithSceneGraphPriority(listener, this);
+    listener->onKeyPressed = CC_CALLBACK_2(CruxScene::onKeyPressed, this);
     getEventDispatcher()->addEventListenerWithSceneGraphPriority(listener, this);
     
     return true;
 }
 
-void HelloWorld::addEnemy()
+void CruxScene::addEnemy()
 {
     auto target = Sprite::create("Target.png", Rect(0,0,27,40));
 
@@ -132,7 +110,7 @@ void HelloWorld::addEnemy()
     int rangeDuration = maxDuration - minDuration;
     int actualDuration = ( rand() % rangeDuration ) + minDuration;
 
-    std::function<void(Node*)> callbackFunction = std::bind( &HelloWorld::spriteMoveFinished, this, std::placeholders::_1 );
+    std::function<void(Node*)> callbackFunction = std::bind( &CruxScene::spriteMoveFinished, this, std::placeholders::_1 );
 
     // Create the actions
     FiniteTimeAction* actionMove;
@@ -143,18 +121,19 @@ void HelloWorld::addEnemy()
     target->runAction( Sequence::create(actionMove, actionMoveDone, NULL) );
 }
 
-void HelloWorld::spriteMoveFinished(Node* sender)
+void CruxScene::spriteMoveFinished(Node* sender)
 {
     Sprite* sprite = (Sprite*)sender;
     this->removeChild(sprite, true);
 }
 
-void HelloWorld::gameLogic(float dt)
+void CruxScene::gameLoop(float dt)
 {
     game->update();
 }
 
-void HelloWorld::gameUpdated()
+//Callback from game
+void CruxScene::gameUpdated()
 {
     for(int x = 0; x < tileSprites.size(); ++x)
         for(int y = 0; y < tileSprites[0].size(); ++y)
@@ -167,7 +146,7 @@ void HelloWorld::gameUpdated()
     player->setPosition(Point( visibleSize.width/2 + x * sq->getContentSize().width, visibleSize.height/2 + y * sq->getContentSize().height ) );
 }
 
-void HelloWorld::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
+void CruxScene::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
 {
     switch(keyCode){
         case EventKeyboard::KeyCode::KEY_UP_ARROW:
@@ -187,7 +166,7 @@ void HelloWorld::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
     }
 }
 
-void HelloWorld::menuCloseCallback(Object* pSender)
+void CruxScene::menuCloseCallback(Object* pSender)
 {
     Director::getInstance()->end();
 
