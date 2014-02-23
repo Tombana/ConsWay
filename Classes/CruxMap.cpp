@@ -38,8 +38,8 @@ namespace Crux
     {
         vector<vector<char> > grid_copy = grid;
 
-        for(int i = 1; i < (w - 1); ++i)
-            for(int j = 1; j < (h - 1); ++j) {
+        for(int i = 0; i < w; ++i)
+            for(int j = 0; j < h; ++j) {
                 if(grid[i][j] != '*') continue;
                 if(++burnTime[i][j] > 10) {
                     grid[i][j] = '/';
@@ -49,7 +49,8 @@ namespace Crux
                 for(int di = -1; di <= 1; ++di)
                     for(int dj = -1; dj <= 1; ++dj) {
                         if(di == 0 && dj == 0) continue;
-                        if(grid[i + di][j + dj] == '|' || grid[i + di][j + dj] == '.') {
+                        if(val(i + di, j + dj) == 0) continue;
+                        if(val(i + di, j + dj) == '|' || val(i + di, j + dj) == '.') {
                             grid_copy[i + di][j + dj] = '*';
                         }
                     }
@@ -60,7 +61,7 @@ namespace Crux
     char Map::val(int i, int j)
     {
         if((i < 0 || i >= w) || (j < 0 || j >= h)) {
-            return -1;
+            return 0;
         }
         return grid[i][j];
     }

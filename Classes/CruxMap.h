@@ -38,7 +38,7 @@ namespace Crux
             void step(); 
 
             // returns the char value of the square at (i, j)
-            // where 0 <= i < n, 0 <= j < m. returns -1 if the 
+            // where 0 <= i < n, 0 <= j < m. returns 0 if the 
             // square is out of bouds. The char value is the 
             // type of the square, see the legend at the top
             // of this file
