@@ -33,8 +33,8 @@ namespace Crux
         map->initFromConfiguration(sin);
         delegate = _delegate;
 
-        finalx = 9;
-        finaly = 9;
+        finalx = 19;
+        finaly = 19;
 
         gameState = PLAYER_TURN;
 
