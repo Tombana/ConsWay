@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="isometric" width="20" height="20" tilewidth="64" tileheight="32">
+ <tileset firstgid="1" name="iso-64x64-outside" tilewidth="64" tileheight="64">
+  <image source="iso-64x64-outside.png" width="640" height="1024"/>
+ </tileset>
+ <layer name="Background" width="20" height="20">
+  <data encoding="base64" compression="zlib">
+   eJxjZmBgYKYSZqCyWV6j5o2aNwTNU6Oyeco0ME9iELtPAYhFqWgeM9Q8ASqZBzJLEIqp5T5c4YcMcKkjFsDM86QS9gBiAMAFD5E=
+  </data>
+ </layer>
+ <layer name="Water" width="20" height="20">
+  <data encoding="base64" compression="zlib">
+   eJxjYMAPYgnIj4JRAAIJQJwKxMFUMi8EiIOAOJpK5lELpA20A9BADBDH45EfbO4dBcMLAAA38gP+
+  </data>
+ </layer>
+ <layer name="Trees" width="20" height="20">
+  <data encoding="base64" compression="zlib">
+   eJxjYBgaoBWNXzMgriAdtA20A0gADQPtABqBCTQwcxYNzBwFo2CoAQD6qwMy
+  </data>
+ </layer>
+</map>
