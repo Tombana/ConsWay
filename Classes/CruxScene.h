@@ -58,10 +58,6 @@ private:
 
 	vector<Sprite*> npcSprites;
 
-    int tileX;
-    int tileY;
-    vector< vector<Sprite*> > tileSprites;
-
     Rect getRect(char type);
 };
 

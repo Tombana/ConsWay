@@ -98,23 +98,6 @@ bool CruxScene::init()
         npcSprites.push_back(sprt);
     }
 
-    /* auto batchNode = SpriteBatchNode::create("tiles.png", w*h);
-       tileX = batchNode->getTexture()->getPixelsWide() / 4;
-       tileY = batchNode->getTexture()->getPixelsHigh() / 3;
-
-       tileSprites = vector< vector<Sprite*> > ( w, vector<Sprite*>(h, 0) );
-       for(int x = 0; x < w; ++x)
-       for(int y = 0; y < h; ++y)
-       {
-       auto sq = Sprite::createWithTexture(batchNode->getTexture());
-       char type = game->getMap()->val(x,y);
-       sq->setTextureRect(getRect(type));
-       sq->setPosition(origin + Point(tileX/2,tileY/2) + Point(x*tileX, y*tileY));
-       batchNode->addChild(sq);
-       tileSprites[x][y] = sq;
-       }
-       this->addChild(batchNode);*/
-
     auto listener = EventListenerKeyboard::create();
     listener->onKeyPressed = CC_CALLBACK_2(CruxScene::onKeyPressed, this);
     getEventDispatcher()->addEventListenerWithSceneGraphPriority(listener, this);
@@ -123,23 +106,6 @@ bool CruxScene::init()
 
 
     return true;
-}
-
-#define REKT(x,y,a,b) Rect( x * a, y * b, a, b )
-
-Rect CruxScene::getRect(char type)
-{
-    switch(type)
-    {
-        case '.': return REKT(0,0, tileX, tileY);
-        case '|': return REKT(1,0, tileX, tileY);
-        case '#': return REKT(2,0, tileX, tileY);
-        case '*': return REKT(3,0, tileX, tileY);
-        case '=': return REKT(0,1, tileX, tileY);
-        case '~': return REKT(1,1, tileX, tileY);
-        case '/': return REKT(2,1, tileX, tileY);
-        default: return REKT(3,1, tileX, tileY);
-    }
 }
 
 void CruxScene::addEnemy()
