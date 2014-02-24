@@ -49,10 +49,10 @@ namespace Crux
 		
 		NPC tmp(HORSE, Pos2(4,4));
 		NPC tmp2(RANDOM, Pos2(10,10));
-		NPC tmp3(GREEDY, Pos2(20,20));
+		//NPC tmp3(BFS, Pos2(20,20));
 		npclist.push_back(tmp);	
 		npclist.push_back(tmp2);	
-		npclist.push_back(tmp3);	
+		//npclist.push_back(tmp3);	
 
         delegate->gameUpdated();
         return true;
