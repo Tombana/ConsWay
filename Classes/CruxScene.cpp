@@ -54,24 +54,14 @@ bool CruxScene::init()
     Size visibleSize = Director::getInstance()->getVisibleSize();
     Point origin = Director::getInstance()->getVisibleOrigin();
 
-    //Menu with close button
-    //auto closeItem = MenuItemImage::create("CloseNormal.png",
-    //                                       "CloseSelected.png",
-    //                                       CC_CALLBACK_1(CruxScene::menuCloseCallback, this));
-    //closeItem->setPosition(origin + Point(visibleSize.width - closeItem->getContentSize().width/2 ,
-    //                            closeItem->getContentSize().height/2));
-
-    //auto menu = Menu::create(closeItem, NULL);
-    //menu->setPosition(Point::ZERO);
-    //interfaceLayer->addChild(menu, 1);
-
     //Title
-    actionPointsLabel = LabelTTF::create("Action Points: ", "Arial", 24);
-    actionPointsLabel->setPosition(Point(actionPointsLabel->getContentSize().width * 0.5 + 10, visibleSize.height - actionPointsLabel->getContentSize().height * 0.5 - 10));
+    actionPointsLabel = LabelTTF::create("Action Points: ", "Arial", 13);
+    actionPointsLabel->setPosition(Point(actionPointsLabel->getContentSize().width * 0.5 + 20, visibleSize.height - actionPointsLabel->getContentSize().height * 0.5 - 10));
     interfaceLayer->addChild(actionPointsLabel, 6);
 
-    gameStateLabel = LabelTTF::create("Game State: ", "Arial", 24);
-    gameStateLabel->setPosition(Point(gameStateLabel->getContentSize().width * 0.5 + 10, visibleSize.height - gameStateLabel->getContentSize().height - 20));
+    gameStateLabel = LabelTTF::create("Game State: ", "Arial", 13);
+    gameStateLabel->enableStroke(Color3B::BLACK, 3.0f);
+    gameStateLabel->setPosition(Point(gameStateLabel->getContentSize().width * 0.5 + 20, visibleSize.height - gameStateLabel->getContentSize().height - 20));
     interfaceLayer->addChild(gameStateLabel, 6);
 
     //Create player sprite
@@ -204,26 +194,7 @@ void CruxScene::gameLoop(float dt)
 //Callback from game
 void CruxScene::gameUpdated()
 {
-    /* if(tileSprites.empty()) return;
-       for(int x = 0; x < (int)tileSprites.size(); ++x)
-       for(int y = 0; y < (int)tileSprites[0].size(); ++y)
-       tileSprites[x][y]->setTextureRect( getRect( game->getMap()->val(x,y) ) );*/
-    if(!background) {
-        cerr << "ERROR: NO BACKGROUND" << endl;
-        return;
-    }
-    if(!player) {
-        cerr << "ERROR: NO PLAYER" << endl;
-        return;
-    }
-    if(!game) {
-        cerr << "ERROR: NO GAME" << endl;
-        return;
-    }
-    if(!game->getPlayer()) {
-        cerr << "ERROR: NO GAME->PLAYER" << endl;
-        return;
-    }
+    // update player sprit
     Pos2 p = game->getPlayer()->getPosition(); 
     Point target = background->getPositionAt(Point(p.x, p.y));
 
@@ -240,6 +211,7 @@ void CruxScene::gameUpdated()
     ss << ss.rdbuf() << (int)game->getGameState();
     gameStateLabel->setString(ss.str());
 
+    // updated npc sprites
     for(int i=0; i<npcSprites.size(); i++) {
         p=game->getNPC(i).getPos();
         Point target = background->getPositionAt(Point(p.x, p.y));
