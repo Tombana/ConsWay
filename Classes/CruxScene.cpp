@@ -34,9 +34,14 @@ void CruxScene::initializeGame()
 
     game = new Game();
 
+    tileMap = TMXTiledMap::create("test.tmx");
+    background = tileMap->layerNamed("Background");
+    this->addChild(tileMap);
+
+
     //Load game
-    std::string mapdata = FileUtils::getInstance()->getStringFromFile("testmap.txt");
-    game->initialize(this, mapdata);
+    game->setMapProperties(tileMap->getMapSize().width, tileMap->getMapSize().height);
+    game->initialize(this, "");
 }
 
 bool CruxScene::init()
@@ -53,7 +58,7 @@ bool CruxScene::init()
     //auto closeItem = MenuItemImage::create("CloseNormal.png",
     //                                       "CloseSelected.png",
     //                                       CC_CALLBACK_1(CruxScene::menuCloseCallback, this));
-	//closeItem->setPosition(origin + Point(visibleSize.width - closeItem->getContentSize().width/2 ,
+    //closeItem->setPosition(origin + Point(visibleSize.width - closeItem->getContentSize().width/2 ,
     //                            closeItem->getContentSize().height/2));
 
     //auto menu = Menu::create(closeItem, NULL);
@@ -61,10 +66,6 @@ bool CruxScene::init()
     //interfaceLayer->addChild(menu, 1);
 
     //Title
-    auto label = LabelTTF::create("--~~** Crux **~~--", "Arial", 24);
-    label->setPosition(Point(origin.x + visibleSize.width/2, origin.y + visibleSize.height - label->getContentSize().height * 0.5));
-    interfaceLayer->addChild(label, 1);
-
     actionPointsLabel = LabelTTF::create("Action Points: ", "Arial", 24);
     actionPointsLabel->setPosition(Point(actionPointsLabel->getContentSize().width * 0.5 + 10, visibleSize.height - actionPointsLabel->getContentSize().height * 0.5 - 10));
     interfaceLayer->addChild(actionPointsLabel, 6);
@@ -73,11 +74,6 @@ bool CruxScene::init()
     gameStateLabel->setPosition(Point(gameStateLabel->getContentSize().width * 0.5 + 10, visibleSize.height - gameStateLabel->getContentSize().height - 20));
     interfaceLayer->addChild(gameStateLabel, 6);
 
-    initializeGame();
-
-    int w = game->getMap()->getWidth();
-    int h = game->getMap()->getHeight();
-
     //Create player sprite
     player = Sprite::create("Player.png");
     player->setPosition(Point(visibleSize.width/2 + origin.x, visibleSize.height/2 + origin.y));
@@ -85,46 +81,57 @@ bool CruxScene::init()
 
     this->runAction(Follow::create(player));
 
+    initializeGame();
 
-	//Create NPC sprite
-	for(int i=0; i<game->numNPCs(); i++) {
-		string imgName="";
-		switch(game->getNPC(i).getType()) {
-			case HORSE:
-				imgName="HORSE.png";
-			break;
-			//TODO: add other types
-		}
+    int w = game->getMap()->getWidth();
+    int h = game->getMap()->getHeight();
 
-		auto sprt = Sprite::create(imgName);
-		sprt->setPosition(Point(visibleSize.width/2 + origin.x, visibleSize.height/2 + origin.y));
-		this->addChild(sprt, 5);
-		npcSprites.push_back(sprt);
-	}
 
-    auto batchNode = SpriteBatchNode::create("tiles.png", w*h);
-    tileX = batchNode->getTexture()->getPixelsWide() / 4;
-    tileY = batchNode->getTexture()->getPixelsHigh() / 3;
-   
-    tileSprites = vector< vector<Sprite*> > ( w, vector<Sprite*>(h, 0) );
-    for(int x = 0; x < w; ++x)
-        for(int y = 0; y < h; ++y)
-        {
-            auto sq = Sprite::createWithTexture(batchNode->getTexture());
-            char type = game->getMap()->val(x,y);
-            sq->setTextureRect(getRect(type));
-            sq->setPosition(origin + Point(tileX/2,tileY/2) + Point(x*tileX, y*tileY));
-            batchNode->addChild(sq);
-            tileSprites[x][y] = sq;
+    //Create NPC sprite
+    for(int i=0; i<game->numNPCs(); i++) {
+        string imgName="";
+        switch(game->getNPC(i).getType()) {
+            case HORSE:
+                imgName="HORSE.png";
+                break;
+            case RANDOM:
+                imgName="CREEP.png";
+                break;
+            default:
+                imgName="RANDOM.png";
+                break;
         }
-    this->addChild(batchNode);
+
+        auto sprt = Sprite::create(imgName);
+        sprt->setPosition(Point(visibleSize.width/2 + origin.x, visibleSize.height/2 + origin.y));
+        this->addChild(sprt, 5);
+        npcSprites.push_back(sprt);
+    }
+
+    /* auto batchNode = SpriteBatchNode::create("tiles.png", w*h);
+       tileX = batchNode->getTexture()->getPixelsWide() / 4;
+       tileY = batchNode->getTexture()->getPixelsHigh() / 3;
+
+       tileSprites = vector< vector<Sprite*> > ( w, vector<Sprite*>(h, 0) );
+       for(int x = 0; x < w; ++x)
+       for(int y = 0; y < h; ++y)
+       {
+       auto sq = Sprite::createWithTexture(batchNode->getTexture());
+       char type = game->getMap()->val(x,y);
+       sq->setTextureRect(getRect(type));
+       sq->setPosition(origin + Point(tileX/2,tileY/2) + Point(x*tileX, y*tileY));
+       batchNode->addChild(sq);
+       tileSprites[x][y] = sq;
+       }
+       this->addChild(batchNode);*/
 
     auto listener = EventListenerKeyboard::create();
     listener->onKeyPressed = CC_CALLBACK_2(CruxScene::onKeyPressed, this);
     getEventDispatcher()->addEventListenerWithSceneGraphPriority(listener, this);
 
     this->schedule( schedule_selector(CruxScene::gameLoop), 1.0 );
-    
+
+
     return true;
 }
 
@@ -197,14 +204,29 @@ void CruxScene::gameLoop(float dt)
 //Callback from game
 void CruxScene::gameUpdated()
 {
-    if(tileSprites.empty()) return;
-    for(int x = 0; x < (int)tileSprites.size(); ++x)
-        for(int y = 0; y < (int)tileSprites[0].size(); ++y)
-            tileSprites[x][y]->setTextureRect( getRect( game->getMap()->val(x,y) ) );
-    Pos2 p = game->getPlayer()->getPosition();
-    Point origin = Director::getInstance()->getVisibleOrigin();
-    Point target = origin + Point(tileX/2,tileY/2) + Point(p.x*tileX, p.y*tileY);
-    //player->setPosition(target);
+    /* if(tileSprites.empty()) return;
+       for(int x = 0; x < (int)tileSprites.size(); ++x)
+       for(int y = 0; y < (int)tileSprites[0].size(); ++y)
+       tileSprites[x][y]->setTextureRect( getRect( game->getMap()->val(x,y) ) );*/
+    if(!background) {
+        cerr << "ERROR: NO BACKGROUND" << endl;
+        return;
+    }
+    if(!player) {
+        cerr << "ERROR: NO PLAYER" << endl;
+        return;
+    }
+    if(!game) {
+        cerr << "ERROR: NO GAME" << endl;
+        return;
+    }
+    if(!game->getPlayer()) {
+        cerr << "ERROR: NO GAME->PLAYER" << endl;
+        return;
+    }
+    Pos2 p = game->getPlayer()->getPosition(); 
+    Point target = background->getPositionAt(Point(p.x, p.y));
+
     FiniteTimeAction* actionMove = MoveTo::create(0.05f, target);
     player->runAction(actionMove);
 
@@ -218,14 +240,13 @@ void CruxScene::gameUpdated()
     ss << ss.rdbuf() << (int)game->getGameState();
     gameStateLabel->setString(ss.str());
 
-	for(int i=0; i<npcSprites.size(); i++) {
-		Point origin = Director::getInstance()->getVisibleOrigin();
-		Pos2 p=game->getNPC(i).getPos();
-		Point target = origin + Point(tileX/2,tileY/2) + Point(p.x*tileX, p.y*tileY);
-		//player->setPosition(target);
-		FiniteTimeAction* actionMove = MoveTo::create(0.05f, target);
-		npcSprites[i]->runAction(actionMove);
-	}
+    for(int i=0; i<npcSprites.size(); i++) {
+        p=game->getNPC(i).getPos();
+        Point target = background->getPositionAt(Point(p.x, p.y));
+
+        FiniteTimeAction* actionMove = MoveTo::create(0.05f, target);
+        npcSprites[i]->runAction(actionMove);
+    }
 }
 
 void CruxScene::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event)

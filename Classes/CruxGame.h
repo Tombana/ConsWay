@@ -39,6 +39,9 @@ namespace Crux
             Game();
             ~Game();
 
+            // set map properties, need collision map and such
+            void setMapProperties(int w, int h);
+
             // this initializes the game, including the 
             // map, player, start and end points, etc.
             bool initialize(GameDelegate*  _delegate, string mapConfiguration);

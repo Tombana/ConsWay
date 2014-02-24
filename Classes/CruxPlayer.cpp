@@ -27,7 +27,7 @@ namespace Crux
         if(actionPoints <= 0) return;
 
         switch(dir) {
-            case UP:
+            case DOWN:
                 if(position.y == (map->getHeight() - 1))
                     break;
                 position.y++;
@@ -37,7 +37,7 @@ namespace Crux
                     break;
                 position.x--;
                 break;
-            case DOWN:
+            case UP:
                 if(position.y == 0)
                     break;
                 position.y--;

@@ -63,6 +63,7 @@ namespace Crux
         if((i < 0 || i >= w) || (j < 0 || j >= h)) {
             return 0;
         }
+        return 1;
         return grid[i][j];
     }
 

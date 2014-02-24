@@ -53,6 +53,9 @@ private:
     LabelTTF* actionPointsLabel;
     LabelTTF* gameStateLabel;
 
+    TMXTiledMap* tileMap;
+    TMXLayer* background;
+
 	vector<Sprite*> npcSprites;
 
     int tileX;

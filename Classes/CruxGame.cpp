@@ -25,7 +25,7 @@ namespace Crux
 
     bool Game::initialize(GameDelegate* _delegate, string mapConfiguration)
     {
-        stringstream sin(mapConfiguration);
+        /* stringstream sin(mapConfiguration);
         int w, h; 
         sin >> w >> h;
 
@@ -33,7 +33,7 @@ namespace Crux
             delete map;
 
         map = new Map(w, h);
-        map->initFromConfiguration(sin);
+        map->initFromConfiguration(sin); */
         delegate = _delegate;
 
         finalx = 19;
@@ -48,10 +48,23 @@ namespace Crux
         player = new Player();
 		
 		NPC tmp(HORSE, Pos2(4,4));
+		NPC tmp2(RANDOM, Pos2(10,10));
+		NPC tmp3(GREEDY, Pos2(20,20));
 		npclist.push_back(tmp);	
+		npclist.push_back(tmp2);	
+		npclist.push_back(tmp3);	
 
         delegate->gameUpdated();
         return true;
+    }
+
+    void Game::setMapProperties(int w, int h)
+    {
+        if(map)
+            delete map;
+
+        map = new Map(w, h);
+
     }
 
     void Game::performNPCMoves()
@@ -66,7 +79,7 @@ namespace Crux
         if(!(gameState < PLAYER_LOST))
             return; 
 
-        map->step();
+        //map->step();
         checkLegalSquare();
 
         delegate->gameUpdated();
@@ -95,7 +108,7 @@ namespace Crux
         update();
         performNPCMoves();
 
-        player->setActionPoints(apPerTurn);
+        player->setActionPoints(player->getActionPoints() + apPerTurn);
         gameState = PLAYER_TURN;
 
         delegate->gameUpdated();
